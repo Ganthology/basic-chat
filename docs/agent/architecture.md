@@ -24,7 +24,7 @@ src/
       storage/
       network/
       query/
-      design/
+      style/
     product/
       chat/
         data/
@@ -65,7 +65,7 @@ Product A does not import product B. Shared code goes to platform, or a later sh
 
 Clean code. No `data` / `domain` / `view` split. Treat as imported packages.
 
-Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `design` (Button, Text, tokens).
+Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `style` (tokens + `createStyles`).
 
 ## Product
 
@@ -98,6 +98,6 @@ Nest under the product module. Use the same three layers only when the subfeatur
 
 Reusable pieces are composable. Parent owns structure via `children`, slots, or render props.
 
-- Platform `design` = primitives (Button, Text, tokens).
+- Platform `style` = tokens + `createStyles`. Parent composes Button / Text later from those.
 - Product composes screens from those plus local components.
 - No god component that bakes a page layout the parent cannot change.
