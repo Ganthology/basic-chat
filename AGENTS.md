@@ -1,3 +1,6 @@
-# Expo HAS CHANGED
+# Agents
 
-Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before writing any code.
+Read only what the task needs.
+
+- Expo SDK 57: https://docs.expo.dev/versions/v57.0.0/
+- Commits: [docs/agent/commits.md](docs/agent/commits.md)
