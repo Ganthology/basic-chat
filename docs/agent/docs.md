@@ -4,7 +4,7 @@ Write an RFC before a cross-cutting change when more than one valid approach exi
 
 Do not ADR every commit. ADR for boundaries, dependencies, storage, navigation model, i18n, query defaults. RFC when you want debate first.
 
-If a task changes an accepted boundary, open or update an RFC or ADR. Do not silently contradict an accepted ADR.
+If a task changes an accepted boundary, open or update an RFC or ADR. Do not silently contradict [ADR 0001](../adr/0001-modular-clean-architecture.md).
 
 ## RFC vs ADR
 
