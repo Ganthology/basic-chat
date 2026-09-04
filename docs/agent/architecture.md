@@ -65,7 +65,7 @@ Product A does not import product B. Shared code goes to platform, or a later sh
 
 Clean code. No `data` / `domain` / `view` split. Treat as imported packages.
 
-Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `style` (tokens + `createStyles`).
+Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `style` (tokens + `createStyles` + `useLoadFonts`).
 
 ## Product
 
