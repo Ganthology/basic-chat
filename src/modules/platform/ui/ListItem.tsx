@@ -20,8 +20,7 @@ function ListItemRoot({ selected = false, disabled, style, children, ...rest }: 
       {...rest}
       style={({ pressed }) => [
         styles.root,
-        selected && styles.selected,
-        pressed && rest.onPress != null && styles.pressed,
+        (selected || (pressed && rest.onPress != null)) && styles.selected,
         disabled && styles.disabled,
         style,
       ]}
@@ -43,9 +42,6 @@ const styles = createStyles(({ color, padding, spacing }) => ({
   },
   selected: {
     backgroundColor: color.containerSelected,
-  },
-  pressed: {
-    transform: [{ scale: 0.97 }],
   },
   disabled: {
     opacity: 0.4,
