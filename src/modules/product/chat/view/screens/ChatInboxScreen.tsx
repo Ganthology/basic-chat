@@ -16,6 +16,7 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
     isPending,
     isError,
     isFetchingNextPage,
+    enterOrder,
     onEndReached,
     onScroll,
     onScrollBeginDrag,
@@ -32,11 +33,12 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
       contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
       data={rows}
       keyExtractor={(item) => String(item.id)}
-      renderItem={({ item }) => (
+      renderItem={({ item, index }) => (
         <ChatInboxRow
           name={item.name}
           avatar={item.avatar}
           onPress={() => onOpenChat(String(item.id))}
+          enterOrder={enterOrder(index)}
         />
       )}
       onEndReached={onEndReached}
