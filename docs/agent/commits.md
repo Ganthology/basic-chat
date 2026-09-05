@@ -30,7 +30,7 @@ Breaking: `feat(chat)!: drop old message payload` or a `BREAKING CHANGE:` footer
 
 One flat area name. Not a module/layer path.
 
-- Product or platform module: `chat`, `user`, `auth`, `storage`, `network`, `query`, `design`
+- Product or platform module: `chat`, `user`, `auth`, `storage`, `network`, `query`, `logger`, `design`
 - Cross-cutting: `app` (thin routes / root layout), `docs`, `deps`, `repo`
 
 Omit scope only when the change is repo-wide and has no better label.
