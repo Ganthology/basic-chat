@@ -9,23 +9,26 @@ const tabLabelStyle = {
 export default function TabsLayout() {
   return (
     <NativeTabs labelStyle={tabLabelStyle}>
-      <NativeTabs.Trigger name="(chats)" disableTransparentOnScrollEdge>
+      <NativeTabs.Trigger
+        name="(chats)"
+        disableTransparentOnScrollEdge
+        disableAutomaticContentInsets
+      >
         <NativeTabs.Trigger.Icon
-          sf={{ default: "bubble.left.and.bubble.right", selected: "bubble.left.and.bubble.right.fill" }}
+          sf={{
+            default: "bubble.left.and.bubble.right",
+            selected: "bubble.left.and.bubble.right.fill",
+          }}
           md="chat"
         />
-        <NativeTabs.Trigger.Label selectedStyle={tabLabelStyle}>
-          Chats
-        </NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label selectedStyle={tabLabelStyle}>Chats</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="settings" disableTransparentOnScrollEdge>
         <NativeTabs.Trigger.Icon
           sf={{ default: "gearshape", selected: "gearshape.fill" }}
           md="settings"
         />
-        <NativeTabs.Trigger.Label selectedStyle={tabLabelStyle}>
-          Settings
-        </NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label selectedStyle={tabLabelStyle}>Settings</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );

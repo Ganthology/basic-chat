@@ -1,49 +1,80 @@
-import { Pressable, ScrollView } from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
-import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
-const PLACEHOLDER_CONVERSATION_ID = "demo";
+import { ChatInboxRow } from "../components/ChatInboxRow";
+import { useChatInboxScreenVM } from "../viewModel/useChatInboxScreenVM";
 
 type ChatInboxScreenProps = {
   onOpenChat: (conversationId: string) => void;
 };
 
 export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
+  const { conversations, isPending, isError, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useChatInboxScreenVM();
+
+  const rows = isPending || (isError && conversations.length === 0) ? [] : conversations;
+
   return (
-    <ScrollView
+    <FlatList
       style={styles.root}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
+      data={rows}
+      keyExtractor={(item) => String(item.id)}
+      renderItem={({ item, index }) => (
+        <ChatInboxRow
+          name={item.name}
+          avatar={item.avatar}
+          showSeparator={index < rows.length - 1}
+          onPress={() => onOpenChat(String(item.id))}
+        />
+      )}
+      onEndReached={() => {
+        if (hasNextPage && !isFetchingNextPage) {
+          void fetchNextPage();
+        }
+      }}
+      onEndReachedThreshold={0.5}
       contentInsetAdjustmentBehavior="automatic"
-    >
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => onOpenChat(PLACEHOLDER_CONVERSATION_ID)}
-        style={styles.row}
-      >
-        <Heading size="lg">Demo conversation</Heading>
-        <Paragraph size="sm" tone="secondary">
-          Open thread
-        </Paragraph>
-      </Pressable>
-    </ScrollView>
+      ListEmptyComponent={
+        <View style={styles.status}>
+          {isPending ? (
+            <ActivityIndicator />
+          ) : (
+            <Paragraph tone="secondary">
+              {isError ? "Could not load conversations" : "No conversations"}
+            </Paragraph>
+          )}
+        </View>
+      }
+      ListFooterComponent={
+        isFetchingNextPage ? (
+          <View style={styles.footer}>
+            <ActivityIndicator />
+          </View>
+        ) : null
+      }
+    />
   );
 }
 
-const styles = createStyles(({ color, padding, spacing }) => ({
+const styles = createStyles(({ color, padding }) => ({
   root: {
     flex: 1,
     backgroundColor: color.background,
   },
-  content: {
-    padding: padding.lg,
-    gap: spacing.md,
+  emptyContent: {
+    flexGrow: 1,
   },
-  row: {
-    backgroundColor: color.container,
-    borderRadius: padding.sm,
+  status: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     padding: padding.lg,
-    gap: spacing.xs,
+  },
+  footer: {
+    paddingVertical: padding.lg,
+    alignItems: "center",
   },
 }));
