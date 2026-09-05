@@ -1,4 +1,5 @@
 import { type Meta, type StoryObj } from "@storybook/react-native";
+import { Plus, Send } from "lucide-react-native";
 
 import { IconButton } from "./IconButton";
 
@@ -7,7 +8,7 @@ const meta = {
   component: IconButton,
   args: {
     accessibilityLabel: "Start a conversation",
-    children: <IconButton.Icon name="plus" />,
+    children: <IconButton.Icon icon={Plus} />,
   },
   argTypes: {
     variant: {
@@ -36,7 +37,7 @@ export const Filled: Story = {
     variant: "filled",
     size: "sm",
     accessibilityLabel: "Send",
-    children: <IconButton.Icon name="send" />,
+    children: <IconButton.Icon icon={Send} />,
   },
 };
 
@@ -49,6 +50,6 @@ export const Disabled: Story = {
     variant: "filled",
     disabled: true,
     accessibilityLabel: "Send",
-    children: <IconButton.Icon name="send" />,
+    children: <IconButton.Icon icon={Send} />,
   },
 };

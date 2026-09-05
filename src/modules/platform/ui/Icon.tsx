@@ -1,29 +1,17 @@
-import { Plus, Send } from "lucide-react-native";
+import { type LucideIcon } from "lucide-react-native";
 
 import { COLOR } from "@/modules/platform/style/COLOR";
 
-export type IconName = "plus" | "send";
 export type IconTone = "default" | "accent" | "accentText" | "secondary" | "tertiary";
 
 export type IconProps = {
-  name: IconName;
+  icon: LucideIcon;
   size?: number;
   tone?: IconTone;
 };
 
-export function Icon({ name, size = 18, tone = "default" }: IconProps) {
-  const color = colorForTone(tone);
-
-  switch (name) {
-    case "plus":
-      return <Plus color={color} size={size} strokeWidth={2.4} />;
-    case "send":
-      return <Send color={color} size={size} strokeWidth={2.4} />;
-    default: {
-      const _exhaustive: never = name;
-      return _exhaustive;
-    }
-  }
+export function Icon({ icon: Glyph, size = 18, tone = "default" }: IconProps) {
+  return <Glyph color={colorForTone(tone)} size={size} strokeWidth={2.4} />;
 }
 
 function colorForTone(tone: IconTone): string {
