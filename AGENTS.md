@@ -5,6 +5,7 @@ Read only what the task needs.
 - Expo SDK 57: https://docs.expo.dev/versions/v57.0.0/
 - Commits: [docs/agent/commits.md](docs/agent/commits.md)
 - Architecture: [docs/agent/architecture.md](docs/agent/architecture.md)
+- View model: [docs/agent/view-model.md](docs/agent/view-model.md) — state + one-job functions; view composes toasts / keyboard / error UI
 - Naming: [docs/agent/naming.md](docs/agent/naming.md)
 - Deps: [docs/agent/deps.md](docs/agent/deps.md)
 - Docs (ADR/RFC): [docs/agent/docs.md](docs/agent/docs.md)

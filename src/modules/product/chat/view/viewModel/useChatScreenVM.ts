@@ -52,47 +52,49 @@ export function useChatScreenVM(conversationId: string) {
     },
   });
 
-  function send() {
-    const body = draft.trim();
-    if (body.length === 0) {
-      return;
-    }
-
-    const optimisticId = createLocalId();
-    const optimistic: ChatThreadMessage = {
-      id: optimisticId,
-      body,
-      from: "user",
-      createdAt: new Date().toISOString(),
-      optimistic: true,
-    };
-
-    setLocalMessages((current) => [...current, optimistic]);
-    setDraft("");
-
-    sendMutation.mutate(body, {
-      onSuccess: (post) => {
-        const confirmedId = String(post.id);
-        setSentIds((current) => new Set(current).add(confirmedId));
-        setLocalMessages((current) =>
-          current.map((message) =>
-            message.id === optimisticId
-              ? {
-                  ...message,
-                  body: post.body,
-                  createdAt: post.createdAt,
-                  confirmedId,
-                  optimistic: false,
-                }
-              : message,
-          ),
-        );
+  function enqueueOutgoing(body: string): string {
+    const id = createLocalId();
+    setLocalMessages((current) => [
+      ...current,
+      {
+        id,
+        body,
+        from: "user",
+        createdAt: new Date().toISOString(),
+        optimistic: true,
       },
-      onError: () => {
-        setLocalMessages((current) => current.filter((message) => message.id !== optimisticId));
-        setDraft((current) => (current.length === 0 ? body : current));
-      },
-    });
+    ]);
+    return id;
+  }
+
+  function confirmOutgoing(localId: string, post: Post): void {
+    const confirmedId = String(post.id);
+    setSentIds((current) => new Set(current).add(confirmedId));
+    setLocalMessages((current) =>
+      current.map((message) =>
+        message.id === localId
+          ? {
+              ...message,
+              body: post.body,
+              createdAt: post.createdAt,
+              confirmedId,
+              optimistic: false,
+            }
+          : message,
+      ),
+    );
+  }
+
+  function dropOutgoing(localId: string): void {
+    setLocalMessages((current) => current.filter((message) => message.id !== localId));
+  }
+
+  function sendMessage(body: string): Promise<Post> {
+    return sendMutation.mutateAsync(body);
+  }
+
+  function unblock(): void {
+    blockedUsersRepository.unblock(conversationId);
   }
 
   return {
@@ -100,12 +102,13 @@ export function useChatScreenVM(conversationId: string) {
     contact: contactQuery.data,
     draft,
     setDraft,
-    send,
+    enqueueOutgoing,
+    confirmOutgoing,
+    dropOutgoing,
+    sendMessage,
     canSend: draft.trim().length > 0 && !isBlocked,
     isBlocked,
-    unblock: () => {
-      blockedUsersRepository.unblock(conversationId);
-    },
+    unblock,
     isPending: messagesQuery.isPending,
     isError: messagesQuery.isError,
   };

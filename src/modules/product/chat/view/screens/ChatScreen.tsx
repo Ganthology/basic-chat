@@ -50,7 +50,10 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     contact,
     draft,
     setDraft,
-    send,
+    enqueueOutgoing,
+    confirmOutgoing,
+    dropOutgoing,
+    sendMessage,
     canSend,
     isBlocked,
     unblock,
@@ -73,9 +76,25 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   }, [isBlocked, listEndSpacer]);
 
   function handleSend() {
-    send();
+    const body = draft.trim();
+    if (body.length === 0 || isBlocked) {
+      return;
+    }
+
+    const localId = enqueueOutgoing(body);
+    setDraft("");
     KeyboardController.setFocusTo("current");
     inputRef.current?.focus();
+
+    void sendMessage(body).then(
+      (post) => {
+        confirmOutgoing(localId, post);
+      },
+      () => {
+        dropOutgoing(localId);
+        setDraft((current) => (current.length === 0 ? body : current));
+      },
+    );
   }
 
   function onComposerOverlayLayout(event: LayoutChangeEvent) {
