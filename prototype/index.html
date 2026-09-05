@@ -314,43 +314,45 @@
                     <div class="bubble out">Yes. Corner booth.</div>
                   </div>
                 </div>
-                <div class="attach-tray" id="attach-tray" hidden>
-                  <button type="button" class="attach-opt" data-attach="photo">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 8h3l1.4-2h5.2L16 8h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" />
-                      <circle cx="12" cy="14" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8" />
-                    </svg>
-                    Photo
-                  </button>
-                  <button type="button" class="attach-opt" data-attach="gallery">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="5" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
-                      <rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
-                    </svg>
-                    Gallery
-                  </button>
-                  <button type="button" class="attach-opt" data-attach="file">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path fill="none" stroke="currentColor" stroke-width="1.8" d="M8 4h6l4 4v12H8V4Z" />
-                      <path fill="none" stroke="currentColor" stroke-width="1.8" d="M14 4v4h4" />
-                    </svg>
-                    File
-                  </button>
+                <div class="composer-float">
+                  <div class="attach-tray" id="attach-tray" hidden>
+                    <button type="button" class="attach-opt" data-attach="photo">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 8h3l1.4-2h5.2L16 8h3a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z" />
+                        <circle cx="12" cy="14" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8" />
+                      </svg>
+                      Photo
+                    </button>
+                    <button type="button" class="attach-opt" data-attach="gallery">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="4" y="5" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+                        <rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+                      </svg>
+                      Gallery
+                    </button>
+                    <button type="button" class="attach-opt" data-attach="file">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="none" stroke="currentColor" stroke-width="1.8" d="M8 4h6l4 4v12H8V4Z" />
+                        <path fill="none" stroke="currentColor" stroke-width="1.8" d="M14 4v4h4" />
+                      </svg>
+                      File
+                    </button>
+                  </div>
+                  <form class="composer" id="composer">
+                    <button type="button" class="nav-icon attach-btn" id="attach-toggle" aria-label="Add attachment" aria-expanded="false">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 6v12M6 12h12" />
+                      </svg>
+                    </button>
+                    <label class="composer-field">
+                      <span class="sr-only">Message</span>
+                      <input id="composer-input" type="text" placeholder="Message" autocomplete="off" />
+                    </label>
+                    <button type="submit" class="send" aria-label="Send">
+                      <svg><use href="#i-send" /></svg>
+                    </button>
+                  </form>
                 </div>
-                <form class="composer" id="composer">
-                  <button type="button" class="nav-icon attach-btn" id="attach-toggle" aria-label="Add attachment" aria-expanded="false">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 6v12M6 12h12" />
-                    </svg>
-                  </button>
-                  <label class="composer-field">
-                    <span class="sr-only">Message</span>
-                    <input id="composer-input" type="text" placeholder="Message" autocomplete="off" />
-                  </label>
-                  <button type="submit" class="send" aria-label="Send">
-                    <svg><use href="#i-send" /></svg>
-                  </button>
-                </form>
               </section>
 
               <section class="page" data-page="profile">

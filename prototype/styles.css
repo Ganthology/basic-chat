@@ -897,7 +897,7 @@ html[data-variant="frost"] .grouped {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 14px 12px 28px;
+  padding: 14px 12px 108px;
 }
 
 .thread-log {
@@ -1019,7 +1019,6 @@ html[data-variant="frost"] .grouped {
   display: none;
 }
 
-.page[data-page="thread"] .scroll,
 .page[data-page="profile"] .scroll {
   padding-bottom: 28px;
 }
@@ -1061,20 +1060,30 @@ html[data-variant="frost"] .grouped {
   background: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
+.composer-float {
+  position: absolute;
+  z-index: 5;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 32px;
+  background: var(--glass);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 0.5px solid var(--glass-border);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 var(--glass-inset);
+}
+
 .attach-tray {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
   flex: 0 0 auto;
-  padding: 8px 12px 0;
-  background: color-mix(in srgb, var(--nav-bg) 62%, transparent);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-top: 0.5px solid var(--sep);
-}
-
-.page:has(#attach-tray:not([hidden])) .composer {
-  border-top-color: transparent;
+  padding: 10px 10px 0;
 }
 
 .attach-opt {
@@ -1106,11 +1115,7 @@ html[data-variant="frost"] .grouped {
   gap: 8px;
   flex: 0 0 auto;
   min-height: 56px;
-  padding: 8px 12px 22px;
-  background: color-mix(in srgb, var(--nav-bg) 62%, transparent);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-top: 0.5px solid var(--sep);
+  padding: 8px 10px;
 }
 
 .attach-btn.is-on {
