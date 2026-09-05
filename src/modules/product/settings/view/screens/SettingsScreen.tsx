@@ -3,8 +3,6 @@ import { ScrollView } from "react-native";
 import { getAppVersion } from "@/modules/platform/config/getAppVersion";
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { GroupedTable } from "@/modules/platform/ui/GroupedTable";
-import { Heading } from "@/modules/platform/ui/Heading";
-import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 export function SettingsScreen() {
   return (
@@ -15,15 +13,15 @@ export function SettingsScreen() {
     >
       <GroupedTable>
         <GroupedTable.Row>
-          <Heading size="lg">Name</Heading>
+          <GroupedTable.Row.Heading>Name</GroupedTable.Row.Heading>
           <GroupedTable.Row.Value>
-            <Paragraph tone="secondary">You</Paragraph>
+            <GroupedTable.Row.Paragraph>You</GroupedTable.Row.Paragraph>
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
         <GroupedTable.Row>
-          <Heading size="lg">Version</Heading>
+          <GroupedTable.Row.Heading>Version</GroupedTable.Row.Heading>
           <GroupedTable.Row.Value>
-            <Paragraph tone="secondary">{getAppVersion()}</Paragraph>
+            <GroupedTable.Row.Paragraph>{getAppVersion()}</GroupedTable.Row.Paragraph>
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
       </GroupedTable>
