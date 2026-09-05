@@ -9,6 +9,7 @@ const blockedUsersRepository = new BlockedUsersRepositoryImpl();
 
 export function useProfileScreenVM(userId: string) {
   const userQuery = useQuery(userQueryOptions(userId));
+  // Repository port, not Zustand. RFC 0002 / ADR 0008.
   const blocked = useSyncExternalStore(
     (onStoreChange) => blockedUsersRepository.subscribe(onStoreChange),
     () => blockedUsersRepository.isBlocked(userId),
