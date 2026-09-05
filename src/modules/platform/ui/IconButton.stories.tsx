@@ -1,19 +1,13 @@
 import { type Meta, type StoryObj } from "@storybook/react-native";
-import { Text } from "react-native";
-
-import { COLOR } from "@/modules/platform/style/COLOR";
 
 import { IconButton } from "./IconButton";
-
-const plus = <Text style={markStyle(COLOR.light.accent)}>+</Text>;
-const send = <Text style={markStyle(COLOR.light.accentText)}>↑</Text>;
 
 const meta = {
   title: "ui/IconButton",
   component: IconButton,
   args: {
     accessibilityLabel: "Start a conversation",
-    children: plus,
+    children: <IconButton.Icon name="plus" />,
   },
   argTypes: {
     variant: {
@@ -42,7 +36,7 @@ export const Filled: Story = {
     variant: "filled",
     size: "sm",
     accessibilityLabel: "Send",
-    children: send,
+    children: <IconButton.Icon name="send" />,
   },
 };
 
@@ -55,10 +49,6 @@ export const Disabled: Story = {
     variant: "filled",
     disabled: true,
     accessibilityLabel: "Send",
-    children: send,
+    children: <IconButton.Icon name="send" />,
   },
 };
-
-function markStyle(color: string) {
-  return { color, fontSize: 22, fontWeight: "600" as const, lineHeight: 24 };
-}

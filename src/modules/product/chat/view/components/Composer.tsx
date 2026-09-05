@@ -3,6 +3,7 @@ import { StyleSheet, View, type ViewProps } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
+import { ComposerIconButton } from "./ComposerIconButton";
 import { ComposerInput } from "./ComposerInput";
 
 export type ComposerProps = ViewProps & {
@@ -32,7 +33,10 @@ function splitComposerChildren(children: ReactNode): {
       input = child;
       return;
     }
-    actions.push(child);
+    if (isValidElement(child) && child.type === ComposerIconButton) {
+      actions.push(child);
+      return;
+    }
   });
 
   return { input, actions };
@@ -53,4 +57,5 @@ const styles = createStyles(({ color, padding, spacing }) => ({
 
 export const Composer = Object.assign(ComposerRoot, {
   Input: ComposerInput,
+  IconButton: ComposerIconButton,
 });

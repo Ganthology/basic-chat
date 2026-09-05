@@ -9,6 +9,9 @@ import {
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
+import { IconButtonContext } from "./IconButtonContext";
+import { IconButtonIcon } from "./IconButtonIcon";
+
 export type IconButtonVariant = "container" | "filled";
 export type IconButtonSize = "sm" | "md";
 
@@ -21,7 +24,7 @@ export type IconButtonProps = Omit<PressableProps, "style" | "children"> & {
   style?: StyleProp<ViewStyle>;
 };
 
-export function IconButton({
+function IconButtonRoot({
   accessibilityLabel,
   children,
   variant = "container",
@@ -32,27 +35,33 @@ export function IconButton({
   ...rest
 }: IconButtonProps) {
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      accessibilityState={{ disabled: disabled ?? false, selected }}
-      disabled={disabled}
-      {...rest}
-      style={({ pressed }) => [
-        styles.root,
-        variantStyles(variant),
-        sizeStyles(size),
-        variant === "container" && selected && styles.selected,
-        variant === "filled" && pressed && styles.filledPressed,
-        pressed && styles.pressed,
-        disabled && styles.disabled,
-        style,
-      ]}
-    >
-      {children}
-    </Pressable>
+    <IconButtonContext.Provider value={{ variant }}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityState={{ disabled: disabled ?? false, selected }}
+        disabled={disabled}
+        {...rest}
+        style={({ pressed }) => [
+          styles.root,
+          variantStyles(variant),
+          sizeStyles(size),
+          variant === "container" && selected && styles.selected,
+          variant === "filled" && pressed && styles.filledPressed,
+          pressed && styles.pressed,
+          disabled && styles.disabled,
+          style,
+        ]}
+      >
+        {children}
+      </Pressable>
+    </IconButtonContext.Provider>
   );
 }
+
+export const IconButton = Object.assign(IconButtonRoot, {
+  Icon: IconButtonIcon,
+});
 
 function variantStyles(variant: IconButtonVariant) {
   switch (variant) {

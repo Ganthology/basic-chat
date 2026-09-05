@@ -1,10 +1,9 @@
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
-import { IconButton } from "@/modules/platform/ui/IconButton";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 import { ChatMessage } from "../components/ChatMessage";
@@ -81,15 +80,9 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
           returnKeyType="send"
           enablesReturnKeyAutomatically
         />
-        <IconButton
-          variant="filled"
-          size="sm"
-          accessibilityLabel="Send"
-          disabled={!canSend}
-          onPress={send}
-        >
-          <Text style={styles.sendIcon}>↑</Text>
-        </IconButton>
+        <Composer.IconButton accessibilityLabel="Send" disabled={!canSend} onPress={send}>
+          <Composer.IconButton.Icon name="send" />
+        </Composer.IconButton>
       </Composer>
     </View>
   );
@@ -109,7 +102,7 @@ function initialsFromName(name: string): string {
   return `${first}${last}`.toUpperCase();
 }
 
-const styles = createStyles(({ color, fontSize, padding, spacing }) => ({
+const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.background,
@@ -136,11 +129,5 @@ const styles = createStyles(({ color, fontSize, padding, spacing }) => ({
     alignItems: "center",
     justifyContent: "center",
     padding: padding.lg,
-  },
-  sendIcon: {
-    color: color.accentText,
-    fontSize: fontSize.xl,
-    fontWeight: "600",
-    lineHeight: 24,
   },
 }));
