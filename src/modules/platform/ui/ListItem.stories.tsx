@@ -1,11 +1,8 @@
 import { type Meta, type StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
 
-import { Avatar } from "./Avatar";
 import { Heading } from "./Heading";
 import { ListItem } from "./ListItem";
-import { ListItemContent } from "./ListItemContent";
-import { ListItemHeadline } from "./ListItemHeadline";
 import { Paragraph } from "./Paragraph";
 
 const meta = {
@@ -27,9 +24,9 @@ type Story = StoryObj<typeof meta>;
 export const Conversation: Story = {
   render: () => (
     <ListItem onPress={() => undefined}>
-      <Avatar initials="MC" />
-      <ListItemContent showSeparator={false}>
-        <ListItemHeadline
+      <ListItem.Avatar initials="MC" />
+      <ListItem.Content showSeparator={false}>
+        <ListItem.Headline
           trailing={
             <Paragraph size="sm" tone="tertiary">
               9:41 AM
@@ -39,11 +36,11 @@ export const Conversation: Story = {
           <Heading size="lg" numberOfLines={1}>
             Maya Chen
           </Heading>
-        </ListItemHeadline>
+        </ListItem.Headline>
         <Paragraph size="md" tone="secondary" numberOfLines={1}>
           See you at 6?
         </Paragraph>
-      </ListItemContent>
+      </ListItem.Content>
     </ListItem>
   ),
 };
@@ -51,9 +48,9 @@ export const Conversation: Story = {
 export const Selected: Story = {
   render: () => (
     <ListItem selected onPress={() => undefined}>
-      <Avatar initials="NP" />
-      <ListItemContent showSeparator={false}>
-        <ListItemHeadline
+      <ListItem.Avatar initials="NP" />
+      <ListItem.Content showSeparator={false}>
+        <ListItem.Headline
           trailing={
             <Paragraph size="sm" tone="tertiary">
               Yesterday
@@ -63,11 +60,11 @@ export const Selected: Story = {
           <Heading size="lg" numberOfLines={1}>
             Noah Patel
           </Heading>
-        </ListItemHeadline>
+        </ListItem.Headline>
         <Paragraph size="md" tone="secondary" numberOfLines={1}>
           Sent the files
         </Paragraph>
-      </ListItemContent>
+      </ListItem.Content>
     </ListItem>
   ),
 };

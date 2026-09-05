@@ -2,12 +2,16 @@ import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from "
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
+import { Avatar } from "./Avatar";
+import { ListItemContent } from "./ListItemContent";
+import { ListItemHeadline } from "./ListItemHeadline";
+
 export type ListItemProps = Omit<PressableProps, "style"> & {
   selected?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
-export function ListItem({ selected = false, disabled, style, children, ...rest }: ListItemProps) {
+function ListItemRoot({ selected = false, disabled, style, children, ...rest }: ListItemProps) {
   return (
     <Pressable
       accessibilityRole={rest.onPress ? "button" : undefined}
@@ -47,3 +51,9 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     opacity: 0.4,
   },
 }));
+
+export const ListItem = Object.assign(ListItemRoot, {
+  Avatar,
+  Content: ListItemContent,
+  Headline: ListItemHeadline,
+});
