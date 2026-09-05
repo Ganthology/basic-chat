@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Heading } from "@/modules/platform/ui/Heading";
@@ -10,7 +10,11 @@ type ProfileScreenProps = {
 
 export function ProfileScreen({ userId }: ProfileScreenProps) {
   return (
-    <View style={styles.root}>
+    <ScrollView
+      style={styles.root}
+      contentContainerStyle={styles.content}
+      contentInsetAdjustmentBehavior="automatic"
+    >
       <View style={styles.identity}>
         <View style={styles.avatar} />
         <Heading size="3xl">Contact</Heading>
@@ -19,7 +23,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
           {userId}
         </Paragraph>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -27,6 +31,8 @@ const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.canvas,
+  },
+  content: {
     padding: padding.lg,
   },
   identity: {
