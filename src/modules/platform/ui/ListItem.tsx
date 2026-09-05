@@ -3,7 +3,6 @@ import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from "
 import { createStyles } from "@/modules/platform/style/createStyles";
 
 import { Avatar } from "./Avatar";
-import { ListGroup } from "./ListGroup";
 import { ListItemContent } from "./ListItemContent";
 import { ListItemHeadline } from "./ListItemHeadline";
 
@@ -49,7 +48,6 @@ const styles = createStyles(({ color, padding, spacing }) => ({
 }));
 
 export const ListItem = Object.assign(ListItemRoot, {
-  Group: ListGroup,
   Avatar,
   Content: ListItemContent,
   Headline: ListItemHeadline,

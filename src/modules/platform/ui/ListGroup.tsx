@@ -2,11 +2,13 @@ import { View, type ViewProps } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
+import { ListItem } from "./ListItem";
+
 export type ListGroupProps = ViewProps & {
   rounded?: boolean;
 };
 
-export function ListGroup({ rounded = false, style, ...rest }: ListGroupProps) {
+function ListGroupRoot({ rounded = false, style, ...rest }: ListGroupProps) {
   return (
     <View
       accessibilityRole="list"
@@ -26,3 +28,7 @@ const styles = createStyles(({ color, radius }) => ({
     borderRadius: radius.lg,
   },
 }));
+
+export const ListGroup = Object.assign(ListGroupRoot, {
+  Item: ListItem,
+});

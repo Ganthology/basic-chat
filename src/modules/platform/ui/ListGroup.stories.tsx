@@ -2,12 +2,12 @@ import { type Meta, type StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
 
 import { Heading } from "./Heading";
-import { ListItem } from "./ListItem";
+import { ListGroup } from "./ListGroup";
 import { Paragraph } from "./Paragraph";
 
 const meta = {
-  title: "ui/ListItem",
-  component: ListItem,
+  title: "ui/ListGroup",
+  component: ListGroup,
   decorators: [
     (Story) => (
       <View style={{ width: "100%" }}>
@@ -15,7 +15,7 @@ const meta = {
       </View>
     ),
   ],
-} satisfies Meta<typeof ListItem>;
+} satisfies Meta<typeof ListGroup>;
 
 export default meta;
 
@@ -23,11 +23,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Conversation: Story = {
   render: () => (
-    <ListItem.Group>
-      <ListItem onPress={() => undefined}>
-        <ListItem.Avatar initials="MC" />
-        <ListItem.Content showSeparator={false}>
-          <ListItem.Headline
+    <ListGroup>
+      <ListGroup.Item onPress={() => undefined}>
+        <ListGroup.Item.Avatar initials="MC" />
+        <ListGroup.Item.Content showSeparator={false}>
+          <ListGroup.Item.Headline
             trailing={
               <Paragraph size="sm" tone="tertiary">
                 9:41 AM
@@ -37,23 +37,23 @@ export const Conversation: Story = {
             <Heading size="lg" numberOfLines={1}>
               Maya Chen
             </Heading>
-          </ListItem.Headline>
+          </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             See you at 6?
           </Paragraph>
-        </ListItem.Content>
-      </ListItem>
-    </ListItem.Group>
+        </ListGroup.Item.Content>
+      </ListGroup.Item>
+    </ListGroup>
   ),
 };
 
 export const Selected: Story = {
   render: () => (
-    <ListItem.Group>
-      <ListItem selected onPress={() => undefined}>
-        <ListItem.Avatar initials="NP" />
-        <ListItem.Content showSeparator={false}>
-          <ListItem.Headline
+    <ListGroup>
+      <ListGroup.Item selected onPress={() => undefined}>
+        <ListGroup.Item.Avatar initials="NP" />
+        <ListGroup.Item.Content showSeparator={false}>
+          <ListGroup.Item.Headline
             trailing={
               <Paragraph size="sm" tone="tertiary">
                 Yesterday
@@ -63,23 +63,23 @@ export const Selected: Story = {
             <Heading size="lg" numberOfLines={1}>
               Noah Patel
             </Heading>
-          </ListItem.Headline>
+          </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             Sent the files
           </Paragraph>
-        </ListItem.Content>
-      </ListItem>
-    </ListItem.Group>
+        </ListGroup.Item.Content>
+      </ListGroup.Item>
+    </ListGroup>
   ),
 };
 
-export const Group: Story = {
+export const Multiple: Story = {
   render: () => (
-    <ListItem.Group>
-      <ListItem onPress={() => undefined}>
-        <ListItem.Avatar initials="MC" />
-        <ListItem.Content>
-          <ListItem.Headline
+    <ListGroup>
+      <ListGroup.Item onPress={() => undefined}>
+        <ListGroup.Item.Avatar initials="MC" />
+        <ListGroup.Item.Content>
+          <ListGroup.Item.Headline
             trailing={
               <Paragraph size="sm" tone="tertiary">
                 9:41 AM
@@ -89,16 +89,16 @@ export const Group: Story = {
             <Heading size="lg" numberOfLines={1}>
               Maya Chen
             </Heading>
-          </ListItem.Headline>
+          </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             See you at 6?
           </Paragraph>
-        </ListItem.Content>
-      </ListItem>
-      <ListItem selected onPress={() => undefined}>
-        <ListItem.Avatar initials="NP" />
-        <ListItem.Content showSeparator={false}>
-          <ListItem.Headline
+        </ListGroup.Item.Content>
+      </ListGroup.Item>
+      <ListGroup.Item selected onPress={() => undefined}>
+        <ListGroup.Item.Avatar initials="NP" />
+        <ListGroup.Item.Content showSeparator={false}>
+          <ListGroup.Item.Headline
             trailing={
               <Paragraph size="sm" tone="tertiary">
                 Yesterday
@@ -108,12 +108,12 @@ export const Group: Story = {
             <Heading size="lg" numberOfLines={1}>
               Noah Patel
             </Heading>
-          </ListItem.Headline>
+          </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             Sent the files
           </Paragraph>
-        </ListItem.Content>
-      </ListItem>
-    </ListItem.Group>
+        </ListGroup.Item.Content>
+      </ListGroup.Item>
+    </ListGroup>
   ),
 };
