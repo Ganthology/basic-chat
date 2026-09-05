@@ -1,16 +1,19 @@
-import { useStore } from "zustand";
+import { useSyncExternalStore } from "react";
 
 import { useQuery } from "@/modules/platform/query/useQuery";
 
 import { BlockedUsersRepositoryImpl } from "../../data/repositoryImpl/BlockedUsersRepositoryImpl";
-import { blockedUsersStore } from "../../data/stores/blockedUsersStore";
 import { userQueryOptions } from "../query/userQueryOptions";
 
 const blockedUsersRepository = new BlockedUsersRepositoryImpl();
 
 export function useProfileScreenVM(userId: string) {
   const userQuery = useQuery(userQueryOptions(userId));
-  const blocked = useStore(blockedUsersStore, (state) => state.ids[userId] === true);
+  const blocked = useSyncExternalStore(
+    (onStoreChange) => blockedUsersRepository.subscribe(onStoreChange),
+    () => blockedUsersRepository.isBlocked(userId),
+    () => blockedUsersRepository.isBlocked(userId),
+  );
 
   return {
     user: userQuery.data,
