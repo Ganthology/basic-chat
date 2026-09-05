@@ -5,7 +5,6 @@ import { Avatar } from "@/modules/platform/ui/Avatar";
 import { GroupedTable } from "@/modules/platform/ui/GroupedTable";
 import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
-import { Toggle } from "@/modules/platform/ui/Toggle";
 
 import { useProfileScreenVM } from "../viewModel/useProfileScreenVM";
 
@@ -44,20 +43,18 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
       {isPending ? null : (
         <GroupedTable>
           <GroupedTable.Row>
-            <Heading size="lg">Phone</Heading>
+            <GroupedTable.Row.Heading>Phone</GroupedTable.Row.Heading>
             <GroupedTable.Row.Value>
-              <Paragraph tone="secondary">{phone}</Paragraph>
+              <GroupedTable.Row.Paragraph>{phone}</GroupedTable.Row.Paragraph>
             </GroupedTable.Row.Value>
           </GroupedTable.Row>
           <GroupedTable.Row>
-            <Heading size="lg">Block</Heading>
-            <GroupedTable.Row.Value>
-              <Toggle
-                accessibilityLabel="Block contact"
-                value={blocked}
-                onValueChange={setBlocked}
-              />
-            </GroupedTable.Row.Value>
+            <GroupedTable.Row.Heading>Block</GroupedTable.Row.Heading>
+            <GroupedTable.Row.Toggle
+              accessibilityLabel="Block contact"
+              value={blocked}
+              onValueChange={setBlocked}
+            />
           </GroupedTable.Row>
         </GroupedTable>
       )}
