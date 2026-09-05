@@ -1,10 +1,13 @@
 import { Stack } from "expo-router/stack";
 
+import { initLogger, wrapRoot } from "@/modules/platform/logger";
 import { QueryProvider } from "@/modules/platform/query/QueryProvider";
 import { transparentHeaderScreenOptions } from "@/modules/platform/style/transparentHeaderScreenOptions";
 import { useLoadFonts } from "@/modules/platform/style/useLoadFonts";
 
-export default function RootLayout() {
+initLogger();
+
+function RootLayout() {
   const loaded = useLoadFonts();
 
   if (!loaded) {
@@ -21,3 +24,5 @@ export default function RootLayout() {
     </QueryProvider>
   );
 }
+
+export default wrapRoot(RootLayout);
