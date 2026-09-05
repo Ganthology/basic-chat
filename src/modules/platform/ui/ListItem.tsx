@@ -5,6 +5,7 @@ import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "./Avatar";
 import { ListItemContent } from "./ListItemContent";
 import { ListItemHeadline } from "./ListItemHeadline";
+import { ListItemTrailing } from "./ListItemTrailing";
 
 export type ListItemProps = Omit<PressableProps, "style"> & {
   selected?: boolean;
@@ -51,4 +52,5 @@ export const ListItem = Object.assign(ListItemRoot, {
   Avatar,
   Content: ListItemContent,
   Headline: ListItemHeadline,
+  Trailing: ListItemTrailing,
 });

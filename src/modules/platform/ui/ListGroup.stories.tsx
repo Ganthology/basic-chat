@@ -27,16 +27,15 @@ export const Conversation: Story = {
       <ListGroup.Item onPress={() => undefined}>
         <ListGroup.Item.Avatar initials="MC" />
         <ListGroup.Item.Content showSeparator={false}>
-          <ListGroup.Item.Headline
-            trailing={
-              <Paragraph size="sm" tone="tertiary">
-                9:41 AM
-              </Paragraph>
-            }
-          >
+          <ListGroup.Item.Headline>
             <Heading size="lg" numberOfLines={1}>
               Maya Chen
             </Heading>
+            <ListGroup.Item.Trailing>
+              <Paragraph size="sm" tone="tertiary">
+                9:41 AM
+              </Paragraph>
+            </ListGroup.Item.Trailing>
           </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             See you at 6?
@@ -53,16 +52,15 @@ export const Selected: Story = {
       <ListGroup.Item selected onPress={() => undefined}>
         <ListGroup.Item.Avatar initials="NP" />
         <ListGroup.Item.Content showSeparator={false}>
-          <ListGroup.Item.Headline
-            trailing={
-              <Paragraph size="sm" tone="tertiary">
-                Yesterday
-              </Paragraph>
-            }
-          >
+          <ListGroup.Item.Headline>
             <Heading size="lg" numberOfLines={1}>
               Noah Patel
             </Heading>
+            <ListGroup.Item.Trailing>
+              <Paragraph size="sm" tone="tertiary">
+                Yesterday
+              </Paragraph>
+            </ListGroup.Item.Trailing>
           </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             Sent the files
@@ -79,16 +77,15 @@ export const Multiple: Story = {
       <ListGroup.Item onPress={() => undefined}>
         <ListGroup.Item.Avatar initials="MC" />
         <ListGroup.Item.Content>
-          <ListGroup.Item.Headline
-            trailing={
-              <Paragraph size="sm" tone="tertiary">
-                9:41 AM
-              </Paragraph>
-            }
-          >
+          <ListGroup.Item.Headline>
             <Heading size="lg" numberOfLines={1}>
               Maya Chen
             </Heading>
+            <ListGroup.Item.Trailing>
+              <Paragraph size="sm" tone="tertiary">
+                9:41 AM
+              </Paragraph>
+            </ListGroup.Item.Trailing>
           </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             See you at 6?
@@ -98,16 +95,15 @@ export const Multiple: Story = {
       <ListGroup.Item selected onPress={() => undefined}>
         <ListGroup.Item.Avatar initials="NP" />
         <ListGroup.Item.Content showSeparator={false}>
-          <ListGroup.Item.Headline
-            trailing={
-              <Paragraph size="sm" tone="tertiary">
-                Yesterday
-              </Paragraph>
-            }
-          >
+          <ListGroup.Item.Headline>
             <Heading size="lg" numberOfLines={1}>
               Noah Patel
             </Heading>
+            <ListGroup.Item.Trailing>
+              <Paragraph size="sm" tone="tertiary">
+                Yesterday
+              </Paragraph>
+            </ListGroup.Item.Trailing>
           </ListGroup.Item.Headline>
           <Paragraph size="md" tone="secondary" numberOfLines={1}>
             Sent the files
