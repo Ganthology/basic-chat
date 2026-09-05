@@ -10,6 +10,8 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
+   Direct deps are exact versions. No `^` or `~`. Bump by editing the number. See [ADR 0003](docs/adr/0003-exact-dependency-versions.md).
+
 2. Start the app
 
    ```bash
