@@ -1,6 +1,7 @@
 import { withBackgrounds } from "@storybook/addon-ondevice-backgrounds";
 import { type Preview } from "@storybook/react-native";
 import { type ReactNode } from "react";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { COLOR } from "@/modules/platform/style/COLOR";
 import { useLoadFonts } from "@/modules/platform/style/useLoadFonts";
@@ -18,7 +19,9 @@ const preview: Preview = {
     withBackgrounds,
     (Story) => (
       <WithFonts>
-        <Story />
+        <KeyboardProvider>
+          <Story />
+        </KeyboardProvider>
       </WithFonts>
     ),
   ],
