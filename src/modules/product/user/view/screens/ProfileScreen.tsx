@@ -1,6 +1,8 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
+import { Heading } from "@/modules/platform/ui/Heading";
+import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 type ProfileScreenProps = {
   userId: string;
@@ -11,15 +13,17 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
     <View style={styles.root}>
       <View style={styles.identity}>
         <View style={styles.avatar} />
-        <Text style={styles.name}>Contact</Text>
-        <Text style={styles.phone}>Phone</Text>
-        <Text style={styles.meta}>{userId}</Text>
+        <Heading size="3xl">Contact</Heading>
+        <Paragraph tone="secondary">Phone</Paragraph>
+        <Paragraph size="sm" tone="tertiary">
+          {userId}
+        </Paragraph>
       </View>
     </View>
   );
 }
 
-const styles = createStyles(({ color, fontFamily, fontSize, padding, spacing }) => ({
+const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.canvas,
@@ -35,20 +39,5 @@ const styles = createStyles(({ color, fontFamily, fontSize, padding, spacing }) 
     height: 72,
     borderRadius: 36,
     backgroundColor: color.surface,
-  },
-  name: {
-    color: color.text,
-    fontFamily: fontFamily.display.bold,
-    fontSize: fontSize.xl,
-  },
-  phone: {
-    color: color.textSecondary,
-    fontFamily: fontFamily.body.regular,
-    fontSize: fontSize.md,
-  },
-  meta: {
-    color: color.textTertiary,
-    fontFamily: fontFamily.body.regular,
-    fontSize: fontSize.sm,
   },
 }));

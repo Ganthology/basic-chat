@@ -1,6 +1,8 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
+import { Heading } from "@/modules/platform/ui/Heading";
+import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 type ChatScreenProps = {
   conversationId: string;
@@ -18,21 +20,25 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
       >
         <View style={styles.avatar} />
         <View style={styles.contactCopy}>
-          <Text style={styles.contactName}>Contact</Text>
-          <Text style={styles.contactMeta}>{conversationId}</Text>
+          <Heading size="md">Contact</Heading>
+          <Paragraph size="sm" tone="tertiary">
+            {conversationId}
+          </Paragraph>
         </View>
       </Pressable>
       <View style={styles.thread}>
-        <Text style={styles.emptyMark}>No messages</Text>
+        <Paragraph size="xl" tone="tertiary">
+          No messages
+        </Paragraph>
       </View>
       <View style={styles.composer}>
-        <Text style={styles.composerHint}>Composer</Text>
+        <Paragraph tone="secondary">Composer</Paragraph>
       </View>
     </View>
   );
 }
 
-const styles = createStyles(({ color, fontFamily, fontSize, padding, spacing }) => ({
+const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.canvas,
@@ -57,36 +63,16 @@ const styles = createStyles(({ color, fontFamily, fontSize, padding, spacing }) 
     flex: 1,
     gap: spacing.xxs,
   },
-  contactName: {
-    color: color.text,
-    fontFamily: fontFamily.display.semibold,
-    fontSize: fontSize.md,
-  },
-  contactMeta: {
-    color: color.textTertiary,
-    fontFamily: fontFamily.body.regular,
-    fontSize: fontSize.sm,
-  },
   thread: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     padding: padding.lg,
   },
-  emptyMark: {
-    color: color.textTertiary,
-    fontFamily: fontFamily.display.semibold,
-    fontSize: fontSize.lg,
-  },
   composer: {
     backgroundColor: color.surface,
     padding: padding.lg,
     borderTopColor: color.separator,
     borderTopWidth: 1,
-  },
-  composerHint: {
-    color: color.textSecondary,
-    fontFamily: fontFamily.body.regular,
-    fontSize: fontSize.md,
   },
 }));
