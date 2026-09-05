@@ -6,16 +6,22 @@ import { useLayoutEffect, useRef } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { KeyboardStickyView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useStore } from "zustand";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
+import { ListGroup } from "@/modules/platform/ui/ListGroup";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
+import { BlockedUsersRepositoryImpl } from "@/modules/product/user/data/repositoryImpl/BlockedUsersRepositoryImpl";
+import { blockedUsersStore } from "@/modules/product/user/data/stores/blockedUsersStore";
 
 import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { Composer } from "../components/Composer";
 import { useChatScreenVM } from "../viewModel/useChatScreenVM";
+
+const blockedUsersRepository = new BlockedUsersRepositoryImpl();
 
 type ChatScreenProps = {
   conversationId: string;
@@ -40,6 +46,10 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   );
   const { messages, contact, draft, setDraft, send, canSend, isPending, isError } =
     useChatScreenVM(conversationId);
+  const isBlocked = useStore(
+    blockedUsersStore,
+    (state) => state.ids[conversationId] === true,
+  );
 
   const rows = isPending || (isError && messages.length === 0) ? [] : messages;
   const name = contact?.name ?? "Contact";
@@ -85,24 +95,45 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
           </View>
         }
       />
-      <View style={[styles.composerDock, { paddingBottom: insets.bottom }]}>
-        <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
-          <View ref={composerRef} onLayout={onComposerLayout}>
-            <Composer>
-              <Composer.Input
-                value={draft}
-                onChangeText={setDraft}
-                onSubmitEditing={send}
-                returnKeyType="send"
-                enablesReturnKeyAutomatically
-              />
-              <Composer.IconButton accessibilityLabel="Send" disabled={!canSend} onPress={send}>
-                <Composer.IconButton.Icon icon={Send} />
-              </Composer.IconButton>
-            </Composer>
-          </View>
-        </KeyboardStickyView>
-      </View>
+      {isBlocked ? (
+        <View style={[styles.blockedDock, { paddingBottom: insets.bottom }]}>
+          <Heading size="lg">You blocked this contact</Heading>
+          <Paragraph tone="secondary">Unblock to send messages.</Paragraph>
+          <ListGroup rounded>
+            <ListGroup.Item
+              accessibilityLabel="Unblock"
+              onPress={() => {
+                blockedUsersRepository.unblock(conversationId);
+              }}
+            >
+              <ListGroup.Item.Content>
+                <ListGroup.Item.Headline>
+                  <Heading size="lg">Unblock</Heading>
+                </ListGroup.Item.Headline>
+              </ListGroup.Item.Content>
+            </ListGroup.Item>
+          </ListGroup>
+        </View>
+      ) : (
+        <View style={[styles.composerDock, { paddingBottom: insets.bottom }]}>
+          <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
+            <View ref={composerRef} onLayout={onComposerLayout}>
+              <Composer>
+                <Composer.Input
+                  value={draft}
+                  onChangeText={setDraft}
+                  onSubmitEditing={send}
+                  returnKeyType="send"
+                  enablesReturnKeyAutomatically
+                />
+                <Composer.IconButton accessibilityLabel="Send" disabled={!canSend} onPress={send}>
+                  <Composer.IconButton.Icon icon={Send} />
+                </Composer.IconButton>
+              </Composer>
+            </View>
+          </KeyboardStickyView>
+        </View>
+      )}
     </View>
   );
 }
@@ -147,6 +178,12 @@ const styles = createStyles(({ color, padding, spacing }) => ({
   },
   composerDock: {
     backgroundColor: color.container,
+  },
+  blockedDock: {
+    paddingHorizontal: padding.lg,
+    paddingTop: padding.md,
+    gap: spacing.sm,
+    backgroundColor: color.background,
   },
   title: {
     flexDirection: "row",
