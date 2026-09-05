@@ -1,66 +1,82 @@
-# Welcome to your Expo app 👋
+# basic-chat
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Expo chat app against `https://responserift.dev/`.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-   Direct deps are exact versions. No `^` or `~`. Bump by editing the number. See [ADR 0003](docs/adr/0003-exact-dependency-versions.md).
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-   Preview platform UI in Storybook on the iOS simulator:
-
-   ```bash
-   npm run storybook
-   ```
-
-   Swaps the app entry for Storybook. Expo Go on the sim. No `/storybook` route.
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run
 
 ```bash
-npm run reset-project
+cp .env.example .env
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+`EXPO_PUBLIC_API_URL` is already set in [.env.example](.env.example). iOS Simulator or Expo Go. Not Expo web ([docs/agent/verify.md](docs/agent/verify.md)).
 
-### Other setup steps
+```bash
+npm run storybook
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+On-device Storybook. Swaps the app entry.
 
-## Learn more
+Direct deps are exact versions. See [ADR 0003](docs/adr/0003-exact-dependency-versions.md).
 
-To learn more about developing your project with Expo, look at the following resources:
+## Project structure
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+src/app/                  # Expo Router only
+  (tabs)/                 # Chats, Settings
+  chat/[id].tsx
+  profile/[id].tsx
+src/modules/platform/
+  style/                  # design tokens
+  ui/                     # composable design components + React components
+    Avatar/ GroupedTable/ Heading/ Icon/
+    IconButton/ ListGroup/ Paragraph/ Toggle/
+  logger/                 # sentry
+  query/                  # tanstack query
+  network/
+src/modules/product/
+  chat/
+  user/
+  settings/
+```
 
-## Join the community
+## Architecture notes
 
-Join our community of developers creating universal apps.
+- Thin `src/app` routes → product screens
+- Product modules: `chat`, `user`, `settings`. Each is `data → view` (domain unused)
+- Platform: composable design components and React components (`style` + `ui`), logger (sentry), query (tanstack query), network
+- React Query for server cache. Zustand persist for blocked IDs
+- `chat` may import `user` ([ADR 0005](docs/adr/0005-chat-may-import-user.md))
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Import rules: [docs/agent/architecture.md](docs/agent/architecture.md).
+
+## Screenshots
+
+Inbox
+
+![Inbox](docs/review/inbox.png)
+
+Chat
+
+![Chat](docs/review/chat.png)
+
+Profile
+
+![Profile](docs/review/profile.png)
+
+Settings
+
+![Settings](docs/review/settings.png)
+
+## How AI was used
+
+- Cursor agents wrote stacked PRs (tokens, network, query, screens, block store)
+- SPEC and agent docs drafted in Cursor
+- Human review / merge on GitHub
+
+## Docs
+
+- [AGENTS.md](AGENTS.md)
+- [docs/agent/architecture.md](docs/agent/architecture.md)
+- [docs/adr/README.md](docs/adr/README.md)
