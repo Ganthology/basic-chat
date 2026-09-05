@@ -4,6 +4,7 @@ export type { ListParams } from "./ListParams";
 export type { ListResponse } from "./ListResponse";
 export type { Page } from "./Page";
 export { toPage } from "./toPage";
+export { getNextPageParam } from "./getNextPageParam";
 export type {
   HttpClient,
   HttpClientConfig,
