@@ -22,11 +22,10 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
       contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
       data={rows}
       keyExtractor={(item) => String(item.id)}
-      renderItem={({ item, index }) => (
+      renderItem={({ item }) => (
         <ChatInboxRow
           name={item.name}
           avatar={item.avatar}
-          showSeparator={index < rows.length - 1}
           onPress={() => onOpenChat(String(item.id))}
         />
       )}
