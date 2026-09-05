@@ -1,5 +1,6 @@
 import { View } from "react-native";
 
+import { getAppVersion } from "@/modules/platform/config/getAppVersion";
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
@@ -17,7 +18,7 @@ export function SettingsScreen() {
       <View style={styles.row}>
         <Paragraph>Version</Paragraph>
         <Paragraph size="sm" tone="secondary">
-          1.0.0
+          {getAppVersion()}
         </Paragraph>
       </View>
     </View>
