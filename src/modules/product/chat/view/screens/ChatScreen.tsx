@@ -6,22 +6,17 @@ import { useLayoutEffect, useRef } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { KeyboardStickyView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useStore } from "zustand";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
 import { ListGroup } from "@/modules/platform/ui/ListGroup";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
-import { BlockedUsersRepositoryImpl } from "@/modules/product/user/data/repositoryImpl/BlockedUsersRepositoryImpl";
-import { blockedUsersStore } from "@/modules/product/user/data/stores/blockedUsersStore";
 
 import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { Composer } from "../components/Composer";
 import { useChatScreenVM } from "../viewModel/useChatScreenVM";
-
-const blockedUsersRepository = new BlockedUsersRepositoryImpl();
 
 type ChatScreenProps = {
   conversationId: string;
@@ -44,12 +39,18 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     listRef,
     composerRef,
   );
-  const { messages, contact, draft, setDraft, send, canSend, isPending, isError } =
-    useChatScreenVM(conversationId);
-  const isBlocked = useStore(
-    blockedUsersStore,
-    (state) => state.ids[conversationId] === true,
-  );
+  const {
+    messages,
+    contact,
+    draft,
+    setDraft,
+    send,
+    canSend,
+    isBlocked,
+    unblock,
+    isPending,
+    isError,
+  } = useChatScreenVM(conversationId);
 
   const rows = isPending || (isError && messages.length === 0) ? [] : messages;
   const name = contact?.name ?? "Contact";
@@ -102,9 +103,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
           <ListGroup rounded>
             <ListGroup.Item
               accessibilityLabel="Unblock"
-              onPress={() => {
-                blockedUsersRepository.unblock(conversationId);
-              }}
+              onPress={unblock}
             >
               <ListGroup.Item.Content>
                 <ListGroup.Item.Headline>

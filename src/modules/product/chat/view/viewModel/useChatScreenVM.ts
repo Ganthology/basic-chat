@@ -1,17 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 
 import type { Page } from "@/modules/platform/network/Page";
 import { useInfiniteQuery } from "@/modules/platform/query/useInfiniteQuery";
 import { useQuery } from "@/modules/platform/query/useQuery";
 import type { Post } from "@/modules/product/chat/data/entities/Post";
 import { ChatRepositoryImpl } from "@/modules/product/chat/data/repositoryImpl/ChatRepositoryImpl";
+import { BlockedUsersRepositoryImpl } from "@/modules/product/user/data/repositoryImpl/BlockedUsersRepositoryImpl";
 import { userQueryOptions } from "@/modules/product/user/view/query/userQueryOptions";
 
 import type { ChatMessageFrom } from "../components/ChatMessage";
 import { messagesQueryOptions } from "../query/messagesQueryOptions";
 
 const chatRepository = new ChatRepositoryImpl();
+const blockedUsersRepository = new BlockedUsersRepositoryImpl();
 
 export type ChatThreadMessage = {
   id: string;
@@ -25,6 +27,11 @@ export function useChatScreenVM(conversationId: string) {
   const queryClient = useQueryClient();
   const messagesQuery = useInfiniteQuery(messagesQueryOptions(conversationId));
   const contactQuery = useQuery(userQueryOptions(conversationId));
+  const isBlocked = useSyncExternalStore(
+    (onStoreChange) => blockedUsersRepository.subscribe(onStoreChange),
+    () => blockedUsersRepository.isBlocked(conversationId),
+    () => blockedUsersRepository.isBlocked(conversationId),
+  );
 
   const [draft, setDraft] = useState("");
   const [localMessages, setLocalMessages] = useState<ChatThreadMessage[]>([]);
@@ -91,7 +98,11 @@ export function useChatScreenVM(conversationId: string) {
     draft,
     setDraft,
     send,
-    canSend: draft.trim().length > 0,
+    canSend: draft.trim().length > 0 && !isBlocked,
+    isBlocked,
+    unblock: () => {
+      blockedUsersRepository.unblock(conversationId);
+    },
     isPending: messagesQuery.isPending,
     isError: messagesQuery.isError,
   };
