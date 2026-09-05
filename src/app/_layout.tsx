@@ -1,4 +1,5 @@
 import { Stack } from "expo-router/stack";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { QueryProvider } from "@/modules/platform/query/QueryProvider";
 import { transparentHeaderScreenOptions } from "@/modules/platform/style/transparentHeaderScreenOptions";
@@ -13,11 +14,13 @@ export default function RootLayout() {
 
   return (
     <QueryProvider>
-      <Stack screenOptions={transparentHeaderScreenOptions}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="chat/[id]" options={{ title: "Chat" }} />
-        <Stack.Screen name="profile/[id]" options={{ title: "Profile" }} />
-      </Stack>
+      <KeyboardProvider>
+        <Stack screenOptions={transparentHeaderScreenOptions}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="chat/[id]" options={{ title: "Chat" }} />
+          <Stack.Screen name="profile/[id]" options={{ title: "Profile" }} />
+        </Stack>
+      </KeyboardProvider>
     </QueryProvider>
   );
 }
