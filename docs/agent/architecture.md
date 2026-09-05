@@ -96,7 +96,7 @@ Pure useCases: same input → same output. No React, no query client, no navigat
 
 - `screens` — consumed by `src/app`.
 - `components` — product-local composition.
-- `viewModel` — screen-level orchestration. `hooks` — reusable view logic. Both allowed. Do not invent a state library here.
+- `viewModel` — screen state + single-purpose functions. View composes those functions and UI side effects (toast, keyboard, error copy). See [view-model.md](view-model.md). `hooks` — reusable view logic. Both allowed. Do not invent a state library here.
 - `query` — TanStack `queryOptions`. Platform `query` owns the client.
 - `translations` — module strings. i18n library is a later decision.
 
