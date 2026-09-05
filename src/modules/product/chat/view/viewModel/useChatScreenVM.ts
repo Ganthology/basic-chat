@@ -21,6 +21,7 @@ export type ChatThreadMessage = {
   from: ChatMessageFrom;
   createdAt: string;
   optimistic?: boolean;
+  confirmedId?: string;
 };
 
 export function useChatScreenVM(conversationId: string) {
@@ -77,10 +78,11 @@ export function useChatScreenVM(conversationId: string) {
           current.map((message) =>
             message.id === optimisticId
               ? {
-                  id: confirmedId,
+                  ...message,
                   body: post.body,
-                  from: "user",
                   createdAt: post.createdAt,
+                  confirmedId,
+                  optimistic: false,
                 }
               : message,
           ),
@@ -114,7 +116,18 @@ function flattenMessagePages(pages: Page<Post>[] | undefined): Post[] {
     return [];
   }
 
-  return pages.flatMap((page) => page.items);
+  const seen = new Set<number>();
+  const posts: Post[] = [];
+  for (const page of pages) {
+    for (const post of page.items) {
+      if (seen.has(post.id)) {
+        continue;
+      }
+      seen.add(post.id);
+      posts.push(post);
+    }
+  }
+  return posts;
 }
 
 function mergeThreadMessages(
@@ -132,11 +145,18 @@ function mergeThreadMessages(
     };
   });
   const fetchedIds = new Set(fetched.map((message) => message.id));
-  const pendingLocal = localMessages.filter((message) => !fetchedIds.has(message.id));
+  const pendingLocal = localMessages.filter((message) => !isLocalInFetched(message, fetchedIds));
 
   return [...fetched, ...pendingLocal].sort((left, right) =>
     left.createdAt.localeCompare(right.createdAt),
   );
+}
+
+function isLocalInFetched(message: ChatThreadMessage, fetchedIds: ReadonlySet<string>): boolean {
+  if (fetchedIds.has(message.id)) {
+    return true;
+  }
+  return message.confirmedId != null && fetchedIds.has(message.confirmedId);
 }
 
 function senderFromSentIds(id: string, sentIds: ReadonlySet<string>): ChatMessageFrom {
