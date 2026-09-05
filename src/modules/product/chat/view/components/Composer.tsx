@@ -1,61 +1,82 @@
 import { Children, isValidElement, type ReactNode } from "react";
-import { StyleSheet, View, type ViewProps } from "react-native";
+import { type ViewProps } from "react-native";
+import { BlurView } from "expo-blur";
+import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
 import { ComposerIconButton } from "./ComposerIconButton";
 import { ComposerInput } from "./ComposerInput";
+import { ComposerTrailing } from "./ComposerTrailing";
 
 export type ComposerProps = ViewProps & {
   children?: ReactNode;
 };
 
 function ComposerRoot({ children, style, ...rest }: ComposerProps) {
-  const { input, actions } = splitComposerChildren(children);
+  const { input, trailing } = splitComposerChildren(children);
 
   return (
-    <View {...rest} style={[styles.root, style]}>
+    <ComposerChrome {...rest} style={[styles.root, style]}>
       {input}
-      {actions}
-    </View>
+      {trailing}
+    </ComposerChrome>
+  );
+}
+
+function ComposerChrome({ children, style, ...rest }: ViewProps) {
+  if (isLiquidGlassAvailable()) {
+    return (
+      <GlassView {...rest} style={style}>
+        {children}
+      </GlassView>
+    );
+  }
+
+  return (
+    <BlurView {...rest} intensity={80} tint="systemMaterial" style={style}>
+      {children}
+    </BlurView>
   );
 }
 
 function splitComposerChildren(children: ReactNode): {
   input: ReactNode;
-  actions: ReactNode[];
+  trailing: ReactNode;
 } {
-  const actions: ReactNode[] = [];
   let input: ReactNode = null;
+  let trailing: ReactNode = null;
 
   Children.forEach(children, (child) => {
     if (isValidElement(child) && child.type === ComposerInput) {
       input = child;
       return;
     }
-    if (isValidElement(child) && child.type === ComposerIconButton) {
-      actions.push(child);
+    if (isValidElement(child) && child.type === ComposerTrailing) {
+      trailing = child;
       return;
     }
   });
 
-  return { input, actions };
+  return { input, trailing };
 }
 
-const styles = createStyles(({ color, padding, spacing }) => ({
+const styles = createStyles(({ padding, radius, spacing }) => ({
   root: {
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "stretch",
+    overflow: "hidden",
     gap: spacing.sm,
-    paddingHorizontal: padding.md,
-    paddingVertical: padding.sm,
-    backgroundColor: color.container,
-    borderTopColor: color.separator,
-    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingLeft: padding.md,
+    paddingRight: padding.xs,
+    paddingVertical: padding.xs,
+    borderRadius: radius.full,
   },
 }));
 
 export const Composer = Object.assign(ComposerRoot, {
   Input: ComposerInput,
+  Trailing: ComposerTrailing,
   IconButton: ComposerIconButton,
 });
