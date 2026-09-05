@@ -22,14 +22,16 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "platforms": ["ios", "android", "web"],
     "plugins": [
       "expo-router",
       [
-        "expo-splash-screen",
+        "react-native-bootsplash",
         {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "logo": "./assets/images/splash-icon.png",
+          "logoWidth": 76,
+          "background": "#208AEF",
+          "assetsOutput": "./assets/bootsplash"
         }
       ]
     ],
