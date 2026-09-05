@@ -8,16 +8,8 @@ import { Paragraph } from "./Paragraph";
 import { Toggle } from "./Toggle";
 
 const meta = {
-  title: "ui/Toggle",
-  component: Toggle,
-  args: {
-    accessibilityLabel: "Block contact",
-    value: false,
-  },
-  argTypes: {
-    value: { control: "boolean" },
-    disabled: { control: "boolean" },
-  },
+  title: "ui/GroupedTable",
+  component: GroupedTable,
   decorators: [
     (Story) => (
       <View style={{ width: "100%" }}>
@@ -25,34 +17,33 @@ const meta = {
       </View>
     ),
   ],
-} satisfies Meta<typeof Toggle>;
+} satisfies Meta<typeof GroupedTable>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Off: Story = {
-  args: { value: false },
+export const Values: Story = {
+  render: () => (
+    <GroupedTable>
+      <GroupedTable.Row>
+        <Heading size="lg">Name</Heading>
+        <GroupedTable.Row.Value>
+          <Paragraph tone="secondary">You</Paragraph>
+        </GroupedTable.Row.Value>
+      </GroupedTable.Row>
+      <GroupedTable.Row>
+        <Heading size="lg">Version</Heading>
+        <GroupedTable.Row.Value>
+          <Paragraph tone="secondary">1.0.0</Paragraph>
+        </GroupedTable.Row.Value>
+      </GroupedTable.Row>
+    </GroupedTable>
+  ),
 };
 
-export const On: Story = {
-  args: { value: true },
-};
-
-export const Disabled: Story = {
-  args: { value: false, disabled: true },
-};
-
-export const Interactive: Story = {
-  render: function InteractiveToggle() {
-    const [value, setValue] = useState(false);
-
-    return <Toggle accessibilityLabel="Block contact" value={value} onValueChange={setValue} />;
-  },
-};
-
-export const InGroupedTable: Story = {
-  render: function ProfileToggle() {
+export const WithToggle: Story = {
+  render: function ToggleRows() {
     const [blocked, setBlocked] = useState(false);
 
     return (
@@ -60,13 +51,17 @@ export const InGroupedTable: Story = {
         <GroupedTable.Row>
           <Heading size="lg">Phone</Heading>
           <GroupedTable.Row.Value>
-            <Paragraph tone="secondary">+1 (415) 555-0142</Paragraph>
+            <Paragraph tone="secondary">+1-202-555-0101</Paragraph>
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
         <GroupedTable.Row>
           <Heading size="lg">Block</Heading>
           <GroupedTable.Row.Value>
-            <Toggle accessibilityLabel="Block contact" value={blocked} onValueChange={setBlocked} />
+            <Toggle
+              accessibilityLabel="Block contact"
+              value={blocked}
+              onValueChange={setBlocked}
+            />
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
       </GroupedTable>
