@@ -3,9 +3,6 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import { GroupedTable } from "./GroupedTable";
-import { Heading } from "./Heading";
-import { Paragraph } from "./Paragraph";
-import { Toggle } from "./Toggle";
 
 const meta = {
   title: "ui/GroupedTable",
@@ -27,15 +24,15 @@ export const Values: Story = {
   render: () => (
     <GroupedTable>
       <GroupedTable.Row>
-        <Heading size="lg">Name</Heading>
+        <GroupedTable.Row.Heading>Name</GroupedTable.Row.Heading>
         <GroupedTable.Row.Value>
-          <Paragraph tone="secondary">You</Paragraph>
+          <GroupedTable.Row.Paragraph>You</GroupedTable.Row.Paragraph>
         </GroupedTable.Row.Value>
       </GroupedTable.Row>
       <GroupedTable.Row>
-        <Heading size="lg">Version</Heading>
+        <GroupedTable.Row.Heading>Version</GroupedTable.Row.Heading>
         <GroupedTable.Row.Value>
-          <Paragraph tone="secondary">1.0.0</Paragraph>
+          <GroupedTable.Row.Paragraph>1.0.0</GroupedTable.Row.Paragraph>
         </GroupedTable.Row.Value>
       </GroupedTable.Row>
     </GroupedTable>
@@ -49,20 +46,18 @@ export const WithToggle: Story = {
     return (
       <GroupedTable>
         <GroupedTable.Row>
-          <Heading size="lg">Phone</Heading>
+          <GroupedTable.Row.Heading>Phone</GroupedTable.Row.Heading>
           <GroupedTable.Row.Value>
-            <Paragraph tone="secondary">+1-202-555-0101</Paragraph>
+            <GroupedTable.Row.Paragraph>+1-202-555-0101</GroupedTable.Row.Paragraph>
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
         <GroupedTable.Row>
-          <Heading size="lg">Block</Heading>
-          <GroupedTable.Row.Value>
-            <Toggle
-              accessibilityLabel="Block contact"
-              value={blocked}
-              onValueChange={setBlocked}
-            />
-          </GroupedTable.Row.Value>
+          <GroupedTable.Row.Heading>Block</GroupedTable.Row.Heading>
+          <GroupedTable.Row.Toggle
+            accessibilityLabel="Block contact"
+            value={blocked}
+            onValueChange={setBlocked}
+          />
         </GroupedTable.Row>
       </GroupedTable>
     );

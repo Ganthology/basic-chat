@@ -3,6 +3,9 @@ import { Pressable, View, type PressableProps, type StyleProp, type ViewStyle } 
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
+import { GroupedTableRowHeading } from "./GroupedTableRowHeading";
+import { GroupedTableRowParagraph } from "./GroupedTableRowParagraph";
+import { GroupedTableRowToggle } from "./GroupedTableRowToggle";
 import { GroupedTableRowValue } from "./GroupedTableRowValue";
 
 export type GroupedTableRowProps = Omit<PressableProps, "style" | "children"> & {
@@ -45,7 +48,10 @@ function splitRowChildren(children: ReactNode): {
   let value: ReactNode = null;
 
   Children.forEach(children, (child) => {
-    if (isValidElement(child) && child.type === GroupedTableRowValue) {
+    if (
+      isValidElement(child) &&
+      (child.type === GroupedTableRowValue || child.type === GroupedTableRowToggle)
+    ) {
       value = child;
       return;
     }
@@ -79,5 +85,8 @@ const styles = createStyles(({ color, padding, spacing }) => ({
 }));
 
 export const GroupedTableRow = Object.assign(GroupedTableRowRoot, {
+  Heading: GroupedTableRowHeading,
   Value: GroupedTableRowValue,
+  Paragraph: GroupedTableRowParagraph,
+  Toggle: GroupedTableRowToggle,
 });
