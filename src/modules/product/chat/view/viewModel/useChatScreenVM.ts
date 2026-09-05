@@ -27,6 +27,7 @@ export function useChatScreenVM(conversationId: string) {
   const queryClient = useQueryClient();
   const messagesQuery = useInfiniteQuery(messagesQueryOptions(conversationId));
   const contactQuery = useQuery(userQueryOptions(conversationId));
+  // Repository port, not Zustand. RFC 0002 / ADR 0008.
   const isBlocked = useSyncExternalStore(
     (onStoreChange) => blockedUsersRepository.subscribe(onStoreChange),
     () => blockedUsersRepository.isBlocked(conversationId),
