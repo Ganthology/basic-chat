@@ -17,6 +17,8 @@ const TRACK_HEIGHT = 31;
 const KNOB_SIZE = 27;
 const KNOB_INSET = 2;
 const KNOB_TRAVEL = TRACK_WIDTH - KNOB_SIZE - KNOB_INSET * 2;
+const TRACK_OFF = COLOR.light.track;
+const TRACK_ON = COLOR.light.accent;
 
 const TIMING = {
   duration: 180,
@@ -46,11 +48,7 @@ export function Toggle({
   }, [progress, value]);
 
   const trackStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      progress.value,
-      [0, 1],
-      [COLOR.light.track, COLOR.light.accent],
-    ),
+    backgroundColor: interpolateColor(progress.value, [0, 1], [TRACK_OFF, TRACK_ON]),
   }));
 
   const knobStyle = useAnimatedStyle(() => ({
@@ -67,7 +65,7 @@ export function Toggle({
       {...rest}
       style={({ pressed }) => [pressed && styles.pressed, disabled && styles.disabled, style]}
     >
-      <Animated.View style={[styles.track, trackStyle]}>
+      <Animated.View style={[styles.track, value ? styles.on : styles.off, trackStyle]}>
         <Animated.View style={[styles.knob, knobStyle]} />
       </Animated.View>
     </Pressable>
@@ -79,6 +77,12 @@ const styles = createStyles(({ radius }) => ({
     width: TRACK_WIDTH,
     height: TRACK_HEIGHT,
     borderRadius: radius.lg,
+  },
+  off: {
+    backgroundColor: TRACK_OFF,
+  },
+  on: {
+    backgroundColor: TRACK_ON,
   },
   knob: {
     position: "absolute",
