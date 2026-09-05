@@ -33,6 +33,7 @@ src/
           entities/
           services/
           adapters/
+          stores/
           repository/
           repositoryImpl/
         domain/
@@ -62,7 +63,7 @@ Imports use `@/modules/...`. Platform is a package mental model, not npm workspa
 | product `data` | platform, own entities/services/repos | view, domain, other product |
 | platform | other platform (sparingly) | any product |
 
-Exception: `chat` may import `user` (entities, repository contract, repository impl). `user` must not import `chat`. See [ADR 0005](../adr/0005-chat-may-import-user.md).
+Exception: `chat` may import `user` (entities, repository contract, repository impl, stores). `user` must not import `chat`. See [ADR 0005](../adr/0005-chat-may-import-user.md).
 
 Shared code goes to platform, or a later shared product module (ADR).
 
@@ -83,8 +84,9 @@ Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query clie
 - `entities` — types and enums only. One export per file. No functions, no React. Domain and view import these. No `domain/entities`.
 - `services` — API, local, or any other source. Stay on the wire shape.
 - `adapters` — map this module's writes onto a foreign API (e.g. send message → create post).
+- `stores` — Zustand vanilla stores. Persist lives here. No React.
 - `repository` — contract only.
-- `repositoryImpl` — compose services and adapters. View and domain depend on the contract.
+- `repositoryImpl` — compose services, adapters, and stores. View and domain depend on the contract.
 
 ### domain
 
