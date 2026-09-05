@@ -1,5 +1,6 @@
 import { Children, isValidElement, type ReactNode } from "react";
-import { StyleSheet, View, type ViewProps } from "react-native";
+import { StyleSheet, type ViewProps } from "react-native";
+import Animated, { Easing, FadeIn, Keyframe, useReducedMotion } from "react-native-reanimated";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
@@ -10,14 +11,34 @@ export type ComposerProps = ViewProps & {
   children?: ReactNode;
 };
 
+const ENTER_MS = 240;
+const EASE_OUT = Easing.bezier(0.23, 1, 0.32, 1);
+const enteringReduced = FadeIn.duration(180);
+const enteringFromBottom = new Keyframe({
+  0: {
+    opacity: 0,
+    transform: [{ translateY: "100%" }],
+  },
+  100: {
+    opacity: 1,
+    transform: [{ translateY: "0%" }],
+    easing: EASE_OUT,
+  },
+}).duration(ENTER_MS);
+
 function ComposerRoot({ children, style, ...rest }: ComposerProps) {
+  const reduceMotion = useReducedMotion();
   const { input, actions } = splitComposerChildren(children);
 
   return (
-    <View {...rest} style={[styles.root, style]}>
+    <Animated.View
+      {...rest}
+      entering={reduceMotion ? enteringReduced : enteringFromBottom}
+      style={[styles.root, style]}
+    >
       {input}
       {actions}
-    </View>
+    </Animated.View>
   );
 }
 
