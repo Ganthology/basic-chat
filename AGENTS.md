@@ -8,3 +8,4 @@ Read only what the task needs.
 - Naming: [docs/agent/naming.md](docs/agent/naming.md)
 - Deps: [docs/agent/deps.md](docs/agent/deps.md)
 - Docs (ADR/RFC): [docs/agent/docs.md](docs/agent/docs.md)
+- Storybook: `npm run storybook` (iOS sim, entry swap). Stories next to platform UI (`*.stories.tsx`).
