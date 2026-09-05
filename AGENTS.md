@@ -9,4 +9,5 @@ Read only what the task needs.
 - Deps: [docs/agent/deps.md](docs/agent/deps.md)
 - Docs (ADR/RFC): [docs/agent/docs.md](docs/agent/docs.md)
 - Storybook: `npm run storybook` (iOS sim, entry swap). Stories next to platform UI (`*.stories.tsx`).
+- Verify UI: [docs/agent/verify.md](docs/agent/verify.md) — iOS sim + `npx serve-sim`. Never Expo web.
 - Composable UI: [.cursor/skills/composable-ui/SKILL.md](.cursor/skills/composable-ui/SKILL.md)
