@@ -1,4 +1,4 @@
-# 0003. Platform network
+# 0004. Platform network
 
 - Status: Accepted
 - Date: 2026-09-05
