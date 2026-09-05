@@ -71,6 +71,8 @@ Clean code. No `data` / `domain` / `view` split. Treat as imported packages.
 
 Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `style` (tokens + `createStyles` + `useLoadFonts`), `ui` (`Heading`, `Paragraph`).
 
+`style` / `ui` name layout roles, not product. `COLOR` is `background`, `container`, `accent` — never `incoming` or other domain nouns. Product maps “their message” → `container`, “mine” → `accent`.
+
 ## Product
 
 `data → domain → view`. View may call data or `queryOptions` directly. Domain is glue and reusable useCases, not a mandatory hop.
