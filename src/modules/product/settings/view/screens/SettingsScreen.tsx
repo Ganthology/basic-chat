@@ -30,14 +30,14 @@ export function SettingsScreen() {
 const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
-    backgroundColor: color.canvas,
+    backgroundColor: color.background,
   },
   content: {
     padding: padding.lg,
     gap: spacing.md,
   },
   row: {
-    backgroundColor: color.surface,
+    backgroundColor: color.container,
     borderRadius: padding.sm,
     padding: padding.lg,
     gap: spacing.xs,
