@@ -5,6 +5,7 @@ import { Send } from "lucide-react-native";
 import { useLayoutEffect, useRef } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { KeyboardStickyView } from "react-native-keyboard-controller";
+import Animated, { FadeIn, FadeOut, SlideInUp, SlideOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
@@ -97,14 +98,15 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         }
       />
       {isBlocked ? (
-        <View style={[styles.blockedDock, { paddingBottom: insets.bottom }]}>
+        <Animated.View
+          entering={FadeIn.duration(220)}
+          exiting={FadeOut.duration(160)}
+          style={[styles.blockedDock, { paddingBottom: insets.bottom }]}
+        >
           <Heading size="lg">You blocked this contact</Heading>
           <Paragraph tone="secondary">Unblock to send messages.</Paragraph>
           <ListGroup rounded>
-            <ListGroup.Item
-              accessibilityLabel="Unblock"
-              onPress={unblock}
-            >
+            <ListGroup.Item accessibilityLabel="Unblock" onPress={unblock}>
               <ListGroup.Item.Content>
                 <ListGroup.Item.Headline>
                   <Heading size="lg">Unblock</Heading>
@@ -112,9 +114,13 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
               </ListGroup.Item.Content>
             </ListGroup.Item>
           </ListGroup>
-        </View>
+        </Animated.View>
       ) : (
-        <View style={[styles.composerDock, { paddingBottom: insets.bottom }]}>
+        <Animated.View
+          entering={SlideInUp.duration(220)}
+          exiting={SlideOutDown.duration(220)}
+          style={[styles.composerDock, { paddingBottom: insets.bottom }]}
+        >
           <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
             <View ref={composerRef} onLayout={onComposerLayout}>
               <Composer>
@@ -131,7 +137,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
               </Composer>
             </View>
           </KeyboardStickyView>
-        </View>
+        </Animated.View>
       )}
     </View>
   );
