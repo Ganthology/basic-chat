@@ -4,6 +4,11 @@ import { network } from "@/modules/platform/network/network";
 
 import type { User } from "../entities/User";
 
+const USER_ROUTES = {
+  users: "/api/users",
+  user: (id: string) => `/api/users/${id}`,
+} as const;
+
 export const userApi = {
   /**
    * GET /api/users
@@ -28,7 +33,7 @@ export const userApi = {
    * }
    */
   async listUsers({ limit, offset }: ListParams) {
-    const response = await network.get<ListResponse<User>>("/api/users", {
+    const response = await network.get<ListResponse<User>>(USER_ROUTES.users, {
       query: { limit, offset },
     });
     return response.data;
@@ -50,7 +55,7 @@ export const userApi = {
    * }
    */
   async getUser(id: string) {
-    const response = await network.get<User>(`/api/users/${id}`);
+    const response = await network.get<User>(USER_ROUTES.user(id));
     return response.data;
   },
 };
