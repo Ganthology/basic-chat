@@ -11,7 +11,7 @@ description: >-
 
 Platform UI is a tree you compose. Not a bag of ReactNode props.
 
-Reference: `src/modules/platform/ui/ListGroup.tsx` + `ListItem*.tsx`.
+Reference: `src/modules/platform/ui/ListGroup/` (`ListGroup.tsx` + `ListItem*.tsx`).
 
 ## Decide first
 
@@ -27,7 +27,7 @@ Do not invent slots for primitives. `IconButton` children = the icon. `size` / `
 1. **Parent > child.** Outer name owns the API. `ListGroup.Item`, not `ListItem.Group`.
 2. **Compose UI. No ReactNode props.** `trailing={...}` is wrong. `<Parent.Trailing>...</Parent.Trailing>` is right.
 3. **Data props are fine.** Strings, numbers, flags: `initials`, `selected`, `rounded`, `size`.
-4. **One file per part.** `ListItemHeadline.tsx` exports `ListItemHeadline`. Attach on the parent. No barrels.
+4. **One file per part.** `ListItemHeadline.tsx` exports `ListItemHeadline`. Attach on the parent. One folder per root (`ui/ListGroup/`). Folder `index.ts` is the public entry only.
 5. **Detect slots with `child.type === Part`.** Same function reference as the attached part.
 
 ```tsx

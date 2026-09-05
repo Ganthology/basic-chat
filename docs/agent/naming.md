@@ -32,8 +32,8 @@ Translation maps (`en.ts` / `chat.en.ts`) wait for an i18n decision.
 
 `src/app` route files stay Expo kebab-case (`chat/[id].tsx`). Those are routes, not components.
 
-No barrel `index.ts` unless a platform package needs a public entry. Import the file you mean.
+No barrel `index.ts` unless a platform package or `ui` component folder needs a public entry. Import the file you mean.
 
-Compound UI: one file per part, attach on the parent (`Object.assign`). Public API is `Parent.Part`. See [composable-ui](../../.cursor/skills/composable-ui/SKILL.md).
+Compound UI: one folder per root (`ui/GroupedTable/`), one file per part, attach on the parent (`Object.assign`). Public API is `Parent.Part`. Folder `index.ts` re-exports the root. See [composable-ui](../../.cursor/skills/composable-ui/SKILL.md).
 
 Do not use kebab-case for components or screens (`message-bubble.tsx`).
