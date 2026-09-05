@@ -6,4 +6,5 @@ Read only what the task needs.
 - Commits: [docs/agent/commits.md](docs/agent/commits.md)
 - Architecture: [docs/agent/architecture.md](docs/agent/architecture.md)
 - Naming: [docs/agent/naming.md](docs/agent/naming.md)
+- Deps: [docs/agent/deps.md](docs/agent/deps.md)
 - Docs (ADR/RFC): [docs/agent/docs.md](docs/agent/docs.md)
