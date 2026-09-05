@@ -6,7 +6,14 @@ module.exports = defineConfig([
   expoConfig,
   eslintPluginPrettierRecommended,
   {
-    ignores: ["dist/*", ".expo/*", "ios/*", "android/*", "web-build/*"],
+    ignores: [
+      "dist/*",
+      ".expo/*",
+      "ios/*",
+      "android/*",
+      "web-build/*",
+      ".rnstorybook/storybook.requires.ts",
+    ],
   },
   {
     files: ["**/*.{ts,tsx}"],
