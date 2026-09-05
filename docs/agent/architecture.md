@@ -63,7 +63,7 @@ Imports use `@/modules/...`. Platform is a package mental model, not npm workspa
 
 Exception: `chat` may import `user` (entities, repository contract, repository impl). `user` must not import `chat`. See [ADR 0005](../adr/0005-chat-may-import-user.md).
 
-Other product A → product B imports stay forbidden. Shared code goes to platform, or a later shared product module (ADR).
+Shared code goes to platform, or a later shared product module (ADR).
 
 ## Platform
 
