@@ -33,9 +33,10 @@ export const ExtraLarge: Story = {
 };
 
 export const Image: Story = {
-  args: {
-    initials: "MC",
-    source: "https://i.pravatar.cc/208",
-    accessibilityLabel: "Maya Chen",
-  },
+  args: { accessibilityLabel: "Maya Chen" },
+  render: (args) => (
+    <Avatar {...args}>
+      <Avatar.Image source="https://i.pravatar.cc/208" />
+    </Avatar>
+  ),
 };
