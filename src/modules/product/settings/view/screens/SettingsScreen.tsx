@@ -1,14 +1,16 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import { getAppVersion } from "@/modules/platform/config/getAppVersion";
 import { createStyles } from "@/modules/platform/style/createStyles";
-import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 export function SettingsScreen() {
   return (
-    <View style={styles.root}>
-      <Heading size="3xl">Settings</Heading>
+    <ScrollView
+      style={styles.root}
+      contentContainerStyle={styles.content}
+      contentInsetAdjustmentBehavior="automatic"
+    >
       <View style={styles.row}>
         <Paragraph>Name</Paragraph>
         <Paragraph size="sm" tone="secondary">
@@ -21,7 +23,7 @@ export function SettingsScreen() {
           {getAppVersion()}
         </Paragraph>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -29,6 +31,8 @@ const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.canvas,
+  },
+  content: {
     padding: padding.lg,
     gap: spacing.md,
   },

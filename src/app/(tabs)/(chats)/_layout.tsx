@@ -1,9 +1,14 @@
 import { Stack } from "expo-router/stack";
 
+import { transparentHeaderScreenOptions } from "@/modules/platform/style/transparentHeaderScreenOptions";
+
 export default function ChatsLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ title: "Chats" }} />
+    <Stack screenOptions={transparentHeaderScreenOptions}>
+      <Stack.Screen
+        name="index"
+        options={{ title: "Chats", headerLargeTitle: true }}
+      />
     </Stack>
   );
 }

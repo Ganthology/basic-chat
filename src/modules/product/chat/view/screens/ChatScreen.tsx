@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Heading } from "@/modules/platform/ui/Heading";
@@ -11,26 +11,32 @@ type ChatScreenProps = {
 
 export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   return (
-    <View style={styles.root}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Open contact profile"
-        onPress={onOpenProfile}
-        style={styles.contact}
+    <View collapsable={false} style={styles.root}>
+      <ScrollView
+        style={styles.thread}
+        contentContainerStyle={styles.threadContent}
+        contentInsetAdjustmentBehavior="automatic"
       >
-        <View style={styles.avatar} />
-        <View style={styles.contactCopy}>
-          <Heading size="md">Contact</Heading>
-          <Paragraph size="sm" tone="tertiary">
-            {conversationId}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Open contact profile"
+          onPress={onOpenProfile}
+          style={styles.contact}
+        >
+          <View style={styles.avatar} />
+          <View style={styles.contactCopy}>
+            <Heading size="md">Contact</Heading>
+            <Paragraph size="sm" tone="tertiary">
+              {conversationId}
+            </Paragraph>
+          </View>
+        </Pressable>
+        <View style={styles.empty}>
+          <Paragraph size="xl" tone="tertiary">
+            No messages
           </Paragraph>
         </View>
-      </Pressable>
-      <View style={styles.thread}>
-        <Paragraph size="xl" tone="tertiary">
-          No messages
-        </Paragraph>
-      </View>
+      </ScrollView>
       <View style={styles.composer}>
         <Paragraph tone="secondary">Composer</Paragraph>
       </View>
@@ -42,6 +48,12 @@ const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.canvas,
+  },
+  thread: {
+    flex: 1,
+  },
+  threadContent: {
+    flexGrow: 1,
   },
   contact: {
     flexDirection: "row",
@@ -63,7 +75,7 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     flex: 1,
     gap: spacing.xxs,
   },
-  thread: {
+  empty: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
