@@ -1,16 +1,18 @@
-import { Icon, type IconName } from "./Icon";
+import { type LucideIcon } from "lucide-react-native";
+
+import { Icon } from "./Icon";
 import { type IconButtonVariant } from "./IconButton";
 import { useIconButtonContext } from "./IconButtonContext";
 
 export type IconButtonIconProps = {
-  name: IconName;
+  icon: LucideIcon;
   size?: number;
 };
 
-export function IconButtonIcon({ name, size }: IconButtonIconProps) {
+export function IconButtonIcon({ icon, size }: IconButtonIconProps) {
   const { variant } = useIconButtonContext();
 
-  return <Icon name={name} size={size} tone={toneForVariant(variant)} />;
+  return <Icon icon={icon} size={size} tone={toneForVariant(variant)} />;
 }
 
 function toneForVariant(variant: IconButtonVariant) {

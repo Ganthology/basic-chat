@@ -1,4 +1,5 @@
 import { type Meta, type StoryObj } from "@storybook/react-native";
+import { Plus, Send } from "lucide-react-native";
 import { View } from "react-native";
 
 import { Icon } from "./Icon";
@@ -7,13 +8,10 @@ const meta = {
   title: "ui/Icon",
   component: Icon,
   args: {
-    name: "plus",
+    icon: Plus,
+    tone: "accent",
   },
   argTypes: {
-    name: {
-      control: { type: "select" },
-      options: ["plus", "send"],
-    },
     tone: {
       control: { type: "select" },
       options: ["default", "accent", "accentText", "secondary", "tertiary"],
@@ -32,10 +30,10 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Plus: Story = {
-  args: { name: "plus", tone: "accent" },
+export const PlusIcon: Story = {
+  args: { icon: Plus, tone: "accent" },
 };
 
-export const Send: Story = {
-  args: { name: "send", tone: "accent" },
+export const SendIcon: Story = {
+  args: { icon: Send, tone: "accent" },
 };
