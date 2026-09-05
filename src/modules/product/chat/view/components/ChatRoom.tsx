@@ -1,16 +1,28 @@
-import { LegendList, type LegendListProps } from "@legendapp/list/react-native";
+import { KeyboardAwareLegendList } from "@legendapp/list/keyboard";
+import { type LegendListProps, type LegendListRef } from "@legendapp/list/react-native";
+import { type Ref } from "react";
 import { View } from "react-native";
+import { type SharedValue } from "react-native-reanimated";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
+
+type ChatRoomProps<ItemT> = Omit<
+  LegendListProps<ItemT>,
+  "anchoredEndSpace" | "contentInsetEndAdjustment" | "refScrollView" | "renderScrollComponent"
+> & {
+  contentInsetEndAdjustment?: SharedValue<number>;
+  keyboardOffset?: number;
+  ref?: Ref<LegendListRef>;
+};
 
 export function ChatRoom<ItemT>({
   style,
   contentContainerStyle,
   ItemSeparatorComponent = ChatRoomSeparator,
   ...rest
-}: LegendListProps<ItemT>) {
+}: ChatRoomProps<ItemT>) {
   return (
-    <LegendList
+    <KeyboardAwareLegendList
       accessibilityRole="list"
       alignItemsAtEnd
       maintainScrollAtEnd
