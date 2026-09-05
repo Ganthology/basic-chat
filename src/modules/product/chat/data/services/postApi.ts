@@ -4,6 +4,10 @@ import { network } from "@/modules/platform/network/network";
 
 import type { Post } from "../entities/Post";
 
+const POST_ROUTES = {
+  posts: "/api/posts",
+} as const;
+
 export const postApi = {
   /**
    * GET /api/posts
@@ -27,7 +31,7 @@ export const postApi = {
    * }
    */
   async listPosts({ userId, limit, offset }: ListParams & { userId: string }) {
-    const response = await network.get<ListResponse<Post>>("/api/posts", {
+    const response = await network.get<ListResponse<Post>>(POST_ROUTES.posts, {
       query: { userId, limit, offset },
     });
     return response.data;
@@ -49,7 +53,7 @@ export const postApi = {
    * }
    */
   async createPost(body: { userId: number; title: string; body: string }) {
-    const response = await network.post<Post>("/api/posts", body);
+    const response = await network.post<Post>(POST_ROUTES.posts, body);
     return response.data;
   },
 };
