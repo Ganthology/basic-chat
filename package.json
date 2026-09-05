@@ -48,6 +48,7 @@
     "lint": "expo lint && npm run lint:deps",
     "lint:fix": "expo lint --fix",
     "lint:deps": "node ./scripts/check-exact-versions.js",
+    "bump-version": "node ./scripts/bump-app-version.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
