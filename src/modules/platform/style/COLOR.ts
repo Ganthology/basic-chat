@@ -8,6 +8,7 @@
  * accentText — text/icon drawn on accent
  * text / textSecondary / textTertiary — copy on background or container
  * separator — hairline
+ * track — inactive control track
  */
 export const COLOR = {
   light: {
@@ -21,6 +22,7 @@ export const COLOR = {
     textSecondary: "#5b6480",
     textTertiary: "#8b93ab",
     separator: "rgba(59, 110, 255, 0.12)",
+    track: "#d9dff0",
   },
   dark: {
     accent: "#6b8fff",
@@ -33,5 +35,6 @@ export const COLOR = {
     textSecondary: "#a8b0cc",
     textTertiary: "#7b84a3",
     separator: "rgba(107, 143, 255, 0.16)",
+    track: "#2a3150",
   },
 } as const;
