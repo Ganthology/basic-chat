@@ -1,17 +1,8 @@
 import { type Meta, type StoryObj } from "@storybook/react-native";
 import { useState } from "react";
-import { Text, View } from "react-native";
-
-import { COLOR } from "@/modules/platform/style/COLOR";
-import { IconButton } from "@/modules/platform/ui/IconButton";
+import { View } from "react-native";
 
 import { Composer } from "./Composer";
-
-const send = (
-  <Text style={{ color: COLOR.light.accentText, fontSize: 22, fontWeight: "600", lineHeight: 24 }}>
-    ↑
-  </Text>
-);
 
 const meta = {
   title: "chat/Composer",
@@ -33,9 +24,9 @@ export const Empty: Story = {
   render: () => (
     <Composer>
       <Composer.Input />
-      <IconButton variant="filled" size="sm" accessibilityLabel="Send" disabled>
-        {send}
-      </IconButton>
+      <Composer.IconButton accessibilityLabel="Send" disabled>
+        <Composer.IconButton.Icon name="send" />
+      </Composer.IconButton>
     </Composer>
   ),
 };
@@ -47,14 +38,9 @@ export const Typed: Story = {
     return (
       <Composer>
         <Composer.Input value={value} onChangeText={setValue} />
-        <IconButton
-          variant="filled"
-          size="sm"
-          accessibilityLabel="Send"
-          disabled={value.trim().length === 0}
-        >
-          {send}
-        </IconButton>
+        <Composer.IconButton accessibilityLabel="Send" disabled={value.trim().length === 0}>
+          <Composer.IconButton.Icon name="send" />
+        </Composer.IconButton>
       </Composer>
     );
   },
@@ -64,9 +50,9 @@ export const DisabledSend: Story = {
   render: () => (
     <Composer>
       <Composer.Input value="" editable={false} />
-      <IconButton variant="filled" size="sm" accessibilityLabel="Send" disabled>
-        {send}
-      </IconButton>
+      <Composer.IconButton accessibilityLabel="Send" disabled>
+        <Composer.IconButton.Icon name="send" />
+      </Composer.IconButton>
     </Composer>
   ),
 };
