@@ -31,3 +31,14 @@ export const ComposerInput = forwardRef<TextInput, ComposerInputProps>(
     );
   },
 );
+
+const styles = createStyles(({ color, fontFamily, fontSize, padding }) => ({
+  input: {
+    flex: 1,
+    minWidth: 0,
+    paddingVertical: padding.sm,
+    color: color.text,
+    fontFamily: fontFamily.body.regular,
+    fontSize: fontSize.md,
+  },
+}));
