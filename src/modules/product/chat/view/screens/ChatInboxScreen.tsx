@@ -11,8 +11,19 @@ type ChatInboxScreenProps = {
 };
 
 export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
-  const { conversations, isPending, isError, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    useChatInboxScreenVM();
+  const {
+    conversations,
+    isPending,
+    isError,
+    isFetchingNextPage,
+    enterOrder,
+    onEndReached,
+    onScroll,
+    onScrollBeginDrag,
+    onScrollEndDrag,
+    onContentSizeChange,
+    onEndReachedThreshold,
+  } = useChatInboxScreenVM();
 
   const rows = isPending || (isError && conversations.length === 0) ? [] : conversations;
 
@@ -22,19 +33,20 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
       contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
       data={rows}
       keyExtractor={(item) => String(item.id)}
-      renderItem={({ item }) => (
+      renderItem={({ item, index }) => (
         <ChatInboxRow
           name={item.name}
           avatar={item.avatar}
           onPress={() => onOpenChat(String(item.id))}
+          enterOrder={enterOrder(index)}
         />
       )}
-      onEndReached={() => {
-        if (hasNextPage && !isFetchingNextPage) {
-          void fetchNextPage();
-        }
-      }}
-      onEndReachedThreshold={0.5}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={onEndReachedThreshold}
+      onScroll={onScroll}
+      onScrollBeginDrag={onScrollBeginDrag}
+      onScrollEndDrag={onScrollEndDrag}
+      onContentSizeChange={onContentSizeChange}
       contentInsetAdjustmentBehavior="automatic"
       ListEmptyComponent={
         <View style={styles.status}>
