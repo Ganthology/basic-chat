@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-09-05
 - Supersedes: [0007](0007-zustand-product-stores.md) (consume path only)
-- RFC:
+- RFC: [0002](../rfc/0002-blocked-users-storage.md)
 
 ## Context
 
