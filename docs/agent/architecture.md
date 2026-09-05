@@ -84,8 +84,8 @@ Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query clie
 - `entities` — types and enums only. One export per file. No functions, no React. Domain and view import these. No `domain/entities`.
 - `services` — API, local, or any other source. Stay on the wire shape.
 - `adapters` — map this module's writes onto a foreign API (e.g. send message → create post).
-- `stores` — Zustand vanilla stores. Persist lives here. No React.
-- `repository` — contract only.
+- `stores` — Zustand vanilla stores. Persist lives here. No React. Private to `repositoryImpl`. View does not import stores.
+- `repository` — contract only. Client state reads, writes, and `subscribe` go through this port.
 - `repositoryImpl` — compose services, adapters, and stores. View and domain depend on the contract.
 
 ### domain
