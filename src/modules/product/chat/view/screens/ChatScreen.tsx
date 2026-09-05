@@ -1,13 +1,14 @@
-import { useKeyboardChatComposerInset } from "@legendapp/list/keyboard";
+import { useKeyboardChatComposerInset, useKeyboardScrollToEnd } from "@legendapp/list/keyboard";
 import { type LegendListRef } from "@legendapp/list/react-native";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
-import { useLayoutEffect, useRef } from "react";
-import { ActivityIndicator, Pressable, View } from "react-native";
-import { KeyboardStickyView } from "react-native-keyboard-controller";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { ActivityIndicator, Pressable, View, type TextInput } from "react-native";
+import { KeyboardController, KeyboardStickyView } from "react-native-keyboard-controller";
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { PADDING } from "@/modules/platform/style/PADDING";
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
@@ -34,15 +35,19 @@ type ChatScreenTitleProps = {
 const blockedEntering = FadeIn.springify();
 const blockedExiting = FadeOut.springify();
 const composerEntering = SlideInDown.springify();
+const COMPOSER_PILL_ESTIMATE = 48;
 
 export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const listRef = useRef<LegendListRef>(null);
   const composerRef = useRef<View>(null);
+  const inputRef = useRef<TextInput>(null);
+  const { freeze, scrollMessageToEnd } = useKeyboardScrollToEnd({ listRef });
   const { contentInsetEndAdjustment, onComposerLayout } = useKeyboardChatComposerInset(
     listRef,
     composerRef,
+    insets.bottom + PADDING.md + COMPOSER_PILL_ESTIMATE,
   );
   const {
     messages,
@@ -56,6 +61,22 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     isPending,
     isError,
   } = useChatScreenVM(conversationId);
+
+  useEffect(() => {
+    if (!isBlocked) {
+      return;
+    }
+
+    contentInsetEndAdjustment.value = 0;
+    listRef.current?.reportContentInset({ bottom: 0 });
+  }, [contentInsetEndAdjustment, isBlocked]);
+
+  function handleSend() {
+    send();
+    KeyboardController.setFocusTo("current");
+    inputRef.current?.focus();
+    void scrollMessageToEnd({ animated: true, closeKeyboard: false });
+  }
 
   const rows = isPending || (isError && messages.length === 0) ? [] : messages;
   const name = contact?.name ?? "Contact";
@@ -88,6 +109,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         alignItemsAtEnd={rows.length > 0}
         contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
         contentInsetEndAdjustment={contentInsetEndAdjustment}
+        freeze={freeze}
         keyboardOffset={insets.bottom}
         ListEmptyComponent={
           <View style={styles.status}>
@@ -125,21 +147,28 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
           key="composer"
           entering={composerEntering}
           exiting={SlideOutDown.duration(220)}
-          style={[styles.composerDock, { paddingBottom: insets.bottom }]}
+          style={styles.composerDock}
         >
           <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
-            <View ref={composerRef} onLayout={onComposerLayout}>
+            <View
+              ref={composerRef}
+              onLayout={onComposerLayout}
+              style={[styles.composerMeasure, { paddingBottom: insets.bottom + PADDING.md }]}
+            >
               <Composer>
                 <Composer.Input
+                  ref={inputRef}
                   value={draft}
                   onChangeText={setDraft}
-                  onSubmitEditing={send}
+                  onSubmitEditing={handleSend}
                   returnKeyType="send"
                   enablesReturnKeyAutomatically
                 />
-                <Composer.IconButton accessibilityLabel="Send" disabled={!canSend} onPress={send}>
-                  <Composer.IconButton.Icon icon={Send} />
-                </Composer.IconButton>
+                <Composer.Trailing>
+                  <Composer.IconButton accessibilityLabel="Send" disabled={!canSend} onPress={handleSend}>
+                    <Composer.IconButton.Icon icon={Send} />
+                  </Composer.IconButton>
+                </Composer.Trailing>
               </Composer>
             </View>
           </KeyboardStickyView>
@@ -188,7 +217,13 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     backgroundColor: color.background,
   },
   composerDock: {
-    backgroundColor: color.container,
+    position: "absolute",
+    right: padding.md,
+    bottom: 0,
+    left: padding.md,
+  },
+  composerMeasure: {
+    width: "100%",
   },
   blockedDock: {
     paddingHorizontal: padding.lg,

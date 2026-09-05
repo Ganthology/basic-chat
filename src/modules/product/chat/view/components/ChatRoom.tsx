@@ -11,6 +11,7 @@ type ChatRoomProps<ItemT> = Omit<
   "anchoredEndSpace" | "contentInsetEndAdjustment" | "refScrollView" | "renderScrollComponent"
 > & {
   contentInsetEndAdjustment?: SharedValue<number>;
+  freeze?: boolean | SharedValue<boolean>;
   keyboardOffset?: number;
   ref?: Ref<LegendListRef>;
 };
@@ -27,6 +28,7 @@ export function ChatRoom<ItemT>({
       alignItemsAtEnd
       maintainScrollAtEnd
       initialScrollAtEnd
+      keyboardShouldPersistTaps="handled"
       ItemSeparatorComponent={ItemSeparatorComponent}
       {...rest}
       style={[styles.list, style]}
