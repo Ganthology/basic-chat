@@ -2,6 +2,7 @@ import { KeyboardAwareLegendList } from "@legendapp/list/keyboard";
 import { type LegendListProps, type LegendListRef } from "@legendapp/list/react-native";
 import { type Ref } from "react";
 import { View } from "react-native";
+import { type KeyboardChatScrollViewProps } from "react-native-keyboard-controller";
 import { type SharedValue } from "react-native-reanimated";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
@@ -12,6 +13,7 @@ type ChatRoomProps<ItemT> = Omit<
 > & {
   contentInsetEndAdjustment?: SharedValue<number>;
   freeze?: boolean | SharedValue<boolean>;
+  keyboardLiftBehavior?: KeyboardChatScrollViewProps["keyboardLiftBehavior"];
   keyboardOffset?: number;
   ref?: Ref<LegendListRef>;
 };

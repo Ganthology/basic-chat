@@ -1,10 +1,9 @@
-import { useKeyboardChatComposerInset, useKeyboardScrollToEnd } from "@legendapp/list/keyboard";
 import { type LegendListRef } from "@legendapp/list/react-native";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
-import { useEffect, useLayoutEffect, useRef } from "react";
-import { ActivityIndicator, Pressable, View, type TextInput } from "react-native";
-import { KeyboardController, KeyboardStickyView } from "react-native-keyboard-controller";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ActivityIndicator, Pressable, View, type LayoutChangeEvent, type TextInput } from "react-native";
+import { KeyboardController, KeyboardStickyView, useKeyboardState } from "react-native-keyboard-controller";
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -41,12 +40,9 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const listRef = useRef<LegendListRef>(null);
-  const composerRef = useRef<View>(null);
   const inputRef = useRef<TextInput>(null);
-  const { freeze, scrollMessageToEnd } = useKeyboardScrollToEnd({ listRef });
-  const { contentInsetEndAdjustment, onComposerLayout } = useKeyboardChatComposerInset(
-    listRef,
-    composerRef,
+  const keyboardHeight = useKeyboardState((state) => (state.isVisible ? state.height : 0));
+  const [composerOverlayHeight, setComposerOverlayHeight] = useState(
     insets.bottom + PADDING.md + COMPOSER_PILL_ESTIMATE,
   );
   const {
@@ -61,21 +57,29 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     isPending,
     isError,
   } = useChatScreenVM(conversationId);
+  const listEndSpacer = isBlocked
+    ? 0
+    : threadEndSpacer(composerOverlayHeight, keyboardHeight, insets.bottom);
 
   useEffect(() => {
-    if (!isBlocked) {
+    if (isBlocked) {
       return;
     }
 
-    contentInsetEndAdjustment.value = 0;
-    listRef.current?.reportContentInset({ bottom: 0 });
-  }, [contentInsetEndAdjustment, isBlocked]);
+    const list = listRef.current;
+    if (list?.getState().isWithinMaintainScrollAtEndThreshold) {
+      void list.scrollToEnd({ animated: true });
+    }
+  }, [isBlocked, listEndSpacer]);
 
   function handleSend() {
     send();
     KeyboardController.setFocusTo("current");
     inputRef.current?.focus();
-    void scrollMessageToEnd({ animated: true, closeKeyboard: false });
+  }
+
+  function onComposerOverlayLayout(event: LayoutChangeEvent) {
+    setComposerOverlayHeight(event.nativeEvent.layout.height);
   }
 
   const rows = isPending || (isError && messages.length === 0) ? [] : messages;
@@ -108,9 +112,9 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         )}
         alignItemsAtEnd={rows.length > 0}
         contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
-        contentInsetEndAdjustment={contentInsetEndAdjustment}
-        freeze={freeze}
-        keyboardOffset={insets.bottom}
+        extraData={listEndSpacer}
+        keyboardLiftBehavior="never"
+        ListFooterComponent={listEndSpacer > 0 ? <View style={{ height: listEndSpacer }} /> : undefined}
         ListEmptyComponent={
           <View style={styles.status}>
             {isPending ? (
@@ -151,8 +155,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         >
           <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
             <View
-              ref={composerRef}
-              onLayout={onComposerLayout}
+              onLayout={onComposerOverlayLayout}
               style={[styles.composerMeasure, { paddingBottom: insets.bottom + PADDING.md }]}
             >
               <Composer>
@@ -195,6 +198,10 @@ function ChatScreenTitle({ name, avatar, initials, onPress }: ChatScreenTitlePro
       </Heading>
     </Pressable>
   );
+}
+
+function threadEndSpacer(overlayHeight: number, keyboardHeight: number, bottomInset: number): number {
+  return overlayHeight + Math.max(0, keyboardHeight - bottomInset);
 }
 
 function initialsFromName(name: string): string {
