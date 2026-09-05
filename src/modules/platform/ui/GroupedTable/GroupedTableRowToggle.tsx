@@ -1,4 +1,4 @@
-import { Toggle, type ToggleProps } from "./Toggle";
+import { Toggle, type ToggleProps } from "../Toggle";
 
 export type GroupedTableRowToggleProps = ToggleProps;
 

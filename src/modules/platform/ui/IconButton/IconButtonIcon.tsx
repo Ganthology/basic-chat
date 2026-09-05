@@ -1,6 +1,6 @@
 import { type LucideIcon } from "lucide-react-native";
 
-import { Icon } from "./Icon";
+import { Icon } from "../Icon";
 import { type IconButtonVariant } from "./IconButton";
 import { useIconButtonContext } from "./IconButtonContext";
 

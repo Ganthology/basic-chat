@@ -2,7 +2,7 @@ import { type Meta, type StoryObj } from "@storybook/react-native";
 import { useState } from "react";
 import { View } from "react-native";
 
-import { GroupedTable } from "./GroupedTable";
+import { GroupedTable } from "../GroupedTable";
 import { Toggle } from "./Toggle";
 
 const meta = {

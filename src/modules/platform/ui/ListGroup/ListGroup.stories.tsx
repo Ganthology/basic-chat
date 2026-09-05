@@ -1,9 +1,9 @@
 import { type Meta, type StoryObj } from "@storybook/react-native";
 import { View } from "react-native";
 
-import { Heading } from "./Heading";
+import { Heading } from "../Heading";
+import { Paragraph } from "../Paragraph";
 import { ListGroup } from "./ListGroup";
-import { Paragraph } from "./Paragraph";
 
 const meta = {
   title: "ui/ListGroup",

@@ -71,7 +71,7 @@ Shared code goes to platform, or a later shared product module (ADR).
 
 Clean code. No `data` / `domain` / `view` split. Treat as imported packages.
 
-Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `logger` (Sentry `Logger` base class), `style` (tokens + `createStyles` + `useLoadFonts`), `ui` (`Heading`, `Paragraph`).
+Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `logger` (Sentry `Logger` base class), `style` (tokens + `createStyles` + `useLoadFonts`), `ui` (one folder per component).
 
 `style` / `ui` name layout roles, not product. `COLOR` is `background`, `container`, `accent` — never `incoming` or other domain nouns. Product maps “their message” → `container`, “mine” → `accent`.
 

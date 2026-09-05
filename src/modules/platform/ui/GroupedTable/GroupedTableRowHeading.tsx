@@ -1,4 +1,4 @@
-import { Heading, type HeadingProps } from "./Heading";
+import { Heading, type HeadingProps } from "../Heading";
 
 export type GroupedTableRowHeadingProps = Omit<HeadingProps, "size" | "tone">;
 

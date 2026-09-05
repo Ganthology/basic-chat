@@ -1,4 +1,4 @@
-import { Paragraph, type ParagraphProps } from "./Paragraph";
+import { Paragraph, type ParagraphProps } from "../Paragraph";
 
 export type GroupedTableRowParagraphProps = Omit<ParagraphProps, "size" | "tone">;
 
