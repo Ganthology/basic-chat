@@ -1,24 +1,18 @@
-import { StyleSheet, View, type ViewProps } from "react-native";
+import { View, type ViewProps } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
-export type ListItemContentProps = ViewProps & {
-  showSeparator?: boolean;
-};
+export type ListItemContentProps = ViewProps;
 
-export function ListItemContent({ showSeparator = true, style, ...rest }: ListItemContentProps) {
-  return <View {...rest} style={[styles.root, showSeparator && styles.separator, style]} />;
+export function ListItemContent({ style, ...rest }: ListItemContentProps) {
+  return <View {...rest} style={[styles.root, style]} />;
 }
 
-const styles = createStyles(({ color, spacing }) => ({
+const styles = createStyles(({ spacing }) => ({
   root: {
     flex: 1,
     minWidth: 0,
     paddingVertical: spacing.xs,
     gap: spacing.xxs,
-  },
-  separator: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: color.separator,
   },
 }));

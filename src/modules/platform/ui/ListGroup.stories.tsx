@@ -26,7 +26,7 @@ export const Conversation: Story = {
     <ListGroup>
       <ListGroup.Item onPress={() => undefined}>
         <ListGroup.Item.Avatar initials="MC" />
-        <ListGroup.Item.Content showSeparator={false}>
+        <ListGroup.Item.Content>
           <ListGroup.Item.Headline>
             <Heading size="lg" numberOfLines={1}>
               Maya Chen
@@ -51,7 +51,7 @@ export const Selected: Story = {
     <ListGroup>
       <ListGroup.Item selected onPress={() => undefined}>
         <ListGroup.Item.Avatar initials="NP" />
-        <ListGroup.Item.Content showSeparator={false}>
+        <ListGroup.Item.Content>
           <ListGroup.Item.Headline>
             <Heading size="lg" numberOfLines={1}>
               Noah Patel
@@ -94,7 +94,7 @@ export const Multiple: Story = {
       </ListGroup.Item>
       <ListGroup.Item selected onPress={() => undefined}>
         <ListGroup.Item.Avatar initials="NP" />
-        <ListGroup.Item.Content showSeparator={false}>
+        <ListGroup.Item.Content>
           <ListGroup.Item.Headline>
             <Heading size="lg" numberOfLines={1}>
               Noah Patel

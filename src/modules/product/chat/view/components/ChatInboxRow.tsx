@@ -3,16 +3,14 @@ import { ListGroup } from "@/modules/platform/ui/ListGroup";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 const LAST_MESSAGE_PLACEHOLDER = "No messages yet";
-const TIMESTAMP_PLACEHOLDER = "—";
 
 type ChatInboxRowProps = {
   name: string;
   avatar: string;
-  showSeparator: boolean;
   onPress: () => void;
 };
 
-export function ChatInboxRow({ name, avatar, showSeparator, onPress }: ChatInboxRowProps) {
+export function ChatInboxRow({ name, avatar, onPress }: ChatInboxRowProps) {
   const initials = initialsFromName(name);
 
   return (
@@ -20,16 +18,11 @@ export function ChatInboxRow({ name, avatar, showSeparator, onPress }: ChatInbox
       <ListGroup.Item.Avatar initials={initials} accessibilityLabel={name}>
         {avatar.length > 0 ? <ListGroup.Item.Avatar.Image source={avatar} /> : null}
       </ListGroup.Item.Avatar>
-      <ListGroup.Item.Content showSeparator={showSeparator}>
+      <ListGroup.Item.Content>
         <ListGroup.Item.Headline>
           <Heading size="lg" numberOfLines={1}>
             {name}
           </Heading>
-          <ListGroup.Item.Trailing>
-            <Paragraph size="sm" tone="tertiary">
-              {TIMESTAMP_PLACEHOLDER}
-            </Paragraph>
-          </ListGroup.Item.Trailing>
         </ListGroup.Item.Headline>
         <Paragraph size="md" tone="secondary" numberOfLines={1}>
           {LAST_MESSAGE_PLACEHOLDER}
