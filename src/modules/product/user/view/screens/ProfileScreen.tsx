@@ -1,18 +1,24 @@
-import { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
+import { Avatar } from "@/modules/platform/ui/Avatar";
+import { GroupedTable } from "@/modules/platform/ui/GroupedTable";
 import { Heading } from "@/modules/platform/ui/Heading";
-import { ListGroup } from "@/modules/platform/ui/ListGroup";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 import { Toggle } from "@/modules/platform/ui/Toggle";
+
+import { useProfileScreenVM } from "../viewModel/useProfileScreenVM";
 
 type ProfileScreenProps = {
   userId: string;
 };
 
 export function ProfileScreen({ userId }: ProfileScreenProps) {
-  const [blocked, setBlocked] = useState(false);
+  const { user, isPending, isError, blocked, setBlocked } = useProfileScreenVM(userId);
+  const name = user?.name ?? "Contact";
+  const phone = user?.phone ?? "—";
+  const avatar = user?.avatar ?? "";
+  const initials = initialsFromName(name);
 
   return (
     <ScrollView
@@ -21,23 +27,56 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
       contentInsetAdjustmentBehavior="automatic"
     >
       <View style={styles.identity}>
-        <View style={styles.avatar} />
-        <Heading size="3xl">Contact</Heading>
-        <Paragraph tone="secondary">Phone</Paragraph>
-        <Paragraph size="sm" tone="tertiary">
-          {userId}
-        </Paragraph>
+        {isPending ? (
+          <ActivityIndicator />
+        ) : (
+          <>
+            <Avatar size="xl" initials={initials} accessibilityLabel={name}>
+              {avatar.length > 0 ? <Avatar.Image source={avatar} /> : null}
+            </Avatar>
+            <Heading size="3xl">{name}</Heading>
+            {isError ? (
+              <Paragraph tone="secondary">Could not load contact</Paragraph>
+            ) : null}
+          </>
+        )}
       </View>
-      <ListGroup rounded>
-        <ListGroup.Item>
-          <ListGroup.Item.Content showSeparator={false}>
+      {isPending ? null : (
+        <GroupedTable>
+          <GroupedTable.Row>
+            <Heading size="lg">Phone</Heading>
+            <GroupedTable.Row.Value>
+              <Paragraph tone="secondary">{phone}</Paragraph>
+            </GroupedTable.Row.Value>
+          </GroupedTable.Row>
+          <GroupedTable.Row>
             <Heading size="lg">Block</Heading>
-          </ListGroup.Item.Content>
-          <Toggle accessibilityLabel="Block contact" value={blocked} onValueChange={setBlocked} />
-        </ListGroup.Item>
-      </ListGroup>
+            <GroupedTable.Row.Value>
+              <Toggle
+                accessibilityLabel="Block contact"
+                value={blocked}
+                onValueChange={setBlocked}
+              />
+            </GroupedTable.Row.Value>
+          </GroupedTable.Row>
+        </GroupedTable>
+      )}
     </ScrollView>
   );
+}
+
+function initialsFromName(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) {
+    return "";
+  }
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+
+  const first = parts[0][0] ?? "";
+  const last = parts[parts.length - 1][0] ?? "";
+  return `${first}${last}`.toUpperCase();
 }
 
 const styles = createStyles(({ color, padding, spacing }) => ({
@@ -53,11 +92,5 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     alignItems: "center",
     gap: spacing.sm,
     paddingVertical: padding.xxl,
-  },
-  avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: color.container,
   },
 }));
