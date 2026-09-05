@@ -47,7 +47,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
 const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
-    backgroundColor: color.canvas,
+    backgroundColor: color.background,
   },
   thread: {
     flex: 1,
@@ -59,7 +59,7 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,
-    backgroundColor: color.surface,
+    backgroundColor: color.container,
     paddingHorizontal: padding.lg,
     paddingVertical: padding.md,
     borderBottomColor: color.separator,
@@ -69,7 +69,7 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: color.surface,
+    backgroundColor: color.container,
   },
   contactCopy: {
     flex: 1,
@@ -82,7 +82,7 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     padding: padding.lg,
   },
   composer: {
-    backgroundColor: color.surface,
+    backgroundColor: color.container,
     padding: padding.lg,
     borderTopColor: color.separator,
     borderTopWidth: 1,

@@ -5,6 +5,7 @@ import { FONT_FAMILY } from "./FONT_FAMILY";
 import { FONT_SIZE } from "./FONT_SIZE";
 import { FONT_WEIGHT } from "./FONT_WEIGHT";
 import { PADDING } from "./PADDING";
+import { RADIUS } from "./RADIUS";
 import { SPACING } from "./SPACING";
 
 type ColorScheme = "light" | "dark";
@@ -18,6 +19,7 @@ export type StyleTokens = {
   fontWeight: typeof FONT_WEIGHT;
   spacing: typeof SPACING;
   padding: typeof PADDING;
+  radius: typeof RADIUS;
 };
 
 const STYLE_TOKENS = {
@@ -28,6 +30,7 @@ const STYLE_TOKENS = {
     fontWeight: FONT_WEIGHT,
     spacing: SPACING,
     padding: PADDING,
+    radius: RADIUS,
   }),
   dark: Object.freeze({
     color: COLOR.dark,
@@ -36,6 +39,7 @@ const STYLE_TOKENS = {
     fontWeight: FONT_WEIGHT,
     spacing: SPACING,
     padding: PADDING,
+    radius: RADIUS,
   }),
 } as const satisfies Record<ColorScheme, StyleTokens>;
 

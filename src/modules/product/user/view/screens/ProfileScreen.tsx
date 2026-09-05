@@ -30,7 +30,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
 const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
-    backgroundColor: color.canvas,
+    backgroundColor: color.background,
   },
   content: {
     padding: padding.lg,
@@ -44,6 +44,6 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: color.surface,
+    backgroundColor: color.container,
   },
 }));
