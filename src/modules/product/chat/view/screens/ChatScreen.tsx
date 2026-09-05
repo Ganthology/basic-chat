@@ -1,6 +1,7 @@
 import { useKeyboardChatComposerInset } from "@legendapp/list/keyboard";
 import { type LegendListRef } from "@legendapp/list/react-native";
 import { useNavigation } from "expo-router";
+import { Send } from "lucide-react-native";
 import { useLayoutEffect, useRef } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { KeyboardStickyView } from "react-native-keyboard-controller";
@@ -96,7 +97,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
                 enablesReturnKeyAutomatically
               />
               <Composer.IconButton accessibilityLabel="Send" disabled={!canSend} onPress={send}>
-                <Composer.IconButton.Icon name="send" />
+                <Composer.IconButton.Icon icon={Send} />
               </Composer.IconButton>
             </Composer>
           </View>

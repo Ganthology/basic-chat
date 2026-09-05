@@ -1,4 +1,5 @@
 import { type Meta, type StoryObj } from "@storybook/react-native";
+import { Send } from "lucide-react-native";
 import { useState } from "react";
 import { View } from "react-native";
 
@@ -25,7 +26,7 @@ export const Empty: Story = {
     <Composer>
       <Composer.Input />
       <Composer.IconButton accessibilityLabel="Send" disabled>
-        <Composer.IconButton.Icon name="send" />
+        <Composer.IconButton.Icon icon={Send} />
       </Composer.IconButton>
     </Composer>
   ),
@@ -39,7 +40,7 @@ export const Typed: Story = {
       <Composer>
         <Composer.Input value={value} onChangeText={setValue} />
         <Composer.IconButton accessibilityLabel="Send" disabled={value.trim().length === 0}>
-          <Composer.IconButton.Icon name="send" />
+          <Composer.IconButton.Icon icon={Send} />
         </Composer.IconButton>
       </Composer>
     );
@@ -51,7 +52,7 @@ export const DisabledSend: Story = {
     <Composer>
       <Composer.Input value="" editable={false} />
       <Composer.IconButton accessibilityLabel="Send" disabled>
-        <Composer.IconButton.Icon name="send" />
+        <Composer.IconButton.Icon icon={Send} />
       </Composer.IconButton>
     </Composer>
   ),
