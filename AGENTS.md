@@ -10,3 +10,4 @@ Read only what the task needs.
 - Docs (ADR/RFC): [docs/agent/docs.md](docs/agent/docs.md)
 - Storybook: `npm run storybook` (iOS sim, entry swap). Stories next to platform UI (`*.stories.tsx`).
 - Composable UI: [.cursor/skills/composable-ui/SKILL.md](.cursor/skills/composable-ui/SKILL.md)
+- Platform tokens/UI are role-generic. No product or domain names in `COLOR`, `style`, or `platform/ui` (`incoming`, `outgoing`, unread, blocked). Map meaning in product compose onto existing roles (`container`, `accent`, …).
