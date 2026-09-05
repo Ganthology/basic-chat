@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Pressable, ScrollView } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Heading } from "@/modules/platform/ui/Heading";
@@ -12,7 +12,11 @@ type ChatInboxScreenProps = {
 
 export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
   return (
-    <View style={styles.root}>
+    <ScrollView
+      style={styles.root}
+      contentContainerStyle={styles.content}
+      contentInsetAdjustmentBehavior="automatic"
+    >
       <Pressable
         accessibilityRole="button"
         onPress={() => onOpenChat(PLACEHOLDER_CONVERSATION_ID)}
@@ -23,7 +27,7 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
           Open thread
         </Paragraph>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -31,6 +35,8 @@ const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.canvas,
+  },
+  content: {
     padding: padding.lg,
     gap: spacing.md,
   },
