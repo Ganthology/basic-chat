@@ -1,36 +1,49 @@
-import { Image, type ImageProps } from "expo-image";
-import { type ReactNode } from "react";
+import { Children, isValidElement, type ReactNode } from "react";
 import { Text, View, type ViewProps } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
+
+import { AvatarImage } from "./AvatarImage";
 
 export type AvatarSize = "sm" | "md" | "xl";
 
 export type AvatarProps = ViewProps & {
   size?: AvatarSize;
   initials?: string;
-  source?: ImageProps["source"];
   children?: ReactNode;
 };
 
-export function Avatar({ size = "md", initials, source, children, style, ...rest }: AvatarProps) {
+function AvatarRoot({ size = "md", initials, children, style, ...rest }: AvatarProps) {
   const sizeStyles = sizeStylesFor(size);
+  const image = findAvatarImage(children);
+  const fallback = image == null ? children : null;
+  const label = typeof fallback === "string" && fallback.length > 0 ? fallback : initials;
 
   return (
     <View
       {...rest}
       accessible={rest.accessible ?? rest.accessibilityLabel != null}
       accessibilityRole={rest.accessibilityRole ?? (rest.accessibilityLabel ? "image" : undefined)}
-      style={[styles.root, sizeStyles.root, { backgroundColor: hueFill(initials) }, style]}
+      style={[styles.root, sizeStyles.root, { backgroundColor: hueFill(label) }, style]}
     >
-      {children ??
-        (source != null ? (
-          <Image source={source} style={styles.image} contentFit="cover" />
-        ) : initials != null && initials.length > 0 ? (
-          <Text style={[styles.initials, sizeStyles.initials]}>{initials}</Text>
-        ) : null)}
+      {image ??
+        (label != null && label.length > 0 ? (
+          <Text style={[styles.initials, sizeStyles.initials]}>{label}</Text>
+        ) : (
+          fallback
+        ))}
     </View>
   );
+}
+
+function findAvatarImage(children: ReactNode) {
+  let image: ReactNode = null;
+  Children.forEach(children, (child) => {
+    if (isValidElement(child) && child.type === AvatarImage) {
+      image = child;
+    }
+  });
+  return image;
 }
 
 function sizeStylesFor(size: AvatarSize) {
@@ -80,10 +93,6 @@ const styles = createStyles(({ fontFamily, fontSize, radius }) => ({
     width: 104,
     height: 104,
   },
-  image: {
-    width: "100%",
-    height: "100%",
-  },
   initials: {
     color: "#ffffff",
     fontFamily: fontFamily.body.semibold,
@@ -98,3 +107,7 @@ const styles = createStyles(({ fontFamily, fontSize, radius }) => ({
     fontSize: fontSize["3xl"],
   },
 }));
+
+export const Avatar = Object.assign(AvatarRoot, {
+  Image: AvatarImage,
+});
