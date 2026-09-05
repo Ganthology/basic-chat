@@ -5,7 +5,7 @@ import { Send } from "lucide-react-native";
 import { useLayoutEffect, useRef } from "react";
 import { ActivityIndicator, Pressable, View } from "react-native";
 import { KeyboardStickyView } from "react-native-keyboard-controller";
-import Animated, { FadeIn, FadeOut, SlideInUp, SlideOutDown } from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
@@ -30,6 +30,10 @@ type ChatScreenTitleProps = {
   initials: string;
   onPress: () => void;
 };
+
+const blockedEntering = FadeIn.springify();
+const blockedExiting = FadeOut.springify();
+const composerEntering = SlideInDown.springify();
 
 export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const navigation = useNavigation();
@@ -99,8 +103,9 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
       />
       {isBlocked ? (
         <Animated.View
-          entering={FadeIn.duration(220)}
-          exiting={FadeOut.duration(160)}
+          key="blocked"
+          entering={blockedEntering}
+          exiting={blockedExiting}
           style={[styles.blockedDock, { paddingBottom: insets.bottom }]}
         >
           <Heading size="lg">You blocked this contact</Heading>
@@ -117,7 +122,8 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         </Animated.View>
       ) : (
         <Animated.View
-          entering={SlideInUp.duration(220)}
+          key="composer"
+          entering={composerEntering}
           exiting={SlideOutDown.duration(220)}
           style={[styles.composerDock, { paddingBottom: insets.bottom }]}
         >
