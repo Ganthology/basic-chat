@@ -1,49 +1,40 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
+import { Heading } from "@/modules/platform/ui/Heading";
+import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 export function SettingsScreen() {
   return (
     <View style={styles.root}>
-      <Text style={styles.title}>Settings</Text>
+      <Heading size="3xl">Settings</Heading>
       <View style={styles.row}>
-        <Text style={styles.rowLabel}>Name</Text>
-        <Text style={styles.rowMeta}>You</Text>
+        <Paragraph>Name</Paragraph>
+        <Paragraph size="sm" tone="secondary">
+          You
+        </Paragraph>
       </View>
       <View style={styles.row}>
-        <Text style={styles.rowLabel}>Version</Text>
-        <Text style={styles.rowMeta}>1.0.0</Text>
+        <Paragraph>Version</Paragraph>
+        <Paragraph size="sm" tone="secondary">
+          1.0.0
+        </Paragraph>
       </View>
     </View>
   );
 }
 
-const styles = createStyles(({ color, fontFamily, fontSize, padding, spacing }) => ({
+const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.canvas,
     padding: padding.lg,
     gap: spacing.md,
   },
-  title: {
-    color: color.text,
-    fontFamily: fontFamily.display.bold,
-    fontSize: fontSize.xl,
-  },
   row: {
     backgroundColor: color.surface,
     borderRadius: padding.sm,
     padding: padding.lg,
     gap: spacing.xs,
-  },
-  rowLabel: {
-    color: color.text,
-    fontFamily: fontFamily.body.medium,
-    fontSize: fontSize.md,
-  },
-  rowMeta: {
-    color: color.textSecondary,
-    fontFamily: fontFamily.body.regular,
-    fontSize: fontSize.sm,
   },
 }));
