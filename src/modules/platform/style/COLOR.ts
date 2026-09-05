@@ -4,7 +4,7 @@
  * background — screen root
  * container — card, row, composer, sheet on background
  * containerSelected — selected/pressed container
- * accent / accentPressed — brand fill (filled button, outgoing bubble)
+ * accent / accentPressed — brand fill
  * accentText — text/icon drawn on accent
  * text / textSecondary / textTertiary — copy on background or container
  * separator — hairline
