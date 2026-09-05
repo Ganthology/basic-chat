@@ -1,14 +1,19 @@
+import { useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Heading } from "@/modules/platform/ui/Heading";
+import { ListGroup } from "@/modules/platform/ui/ListGroup";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
+import { Toggle } from "@/modules/platform/ui/Toggle";
 
 type ProfileScreenProps = {
   userId: string;
 };
 
 export function ProfileScreen({ userId }: ProfileScreenProps) {
+  const [blocked, setBlocked] = useState(false);
+
   return (
     <ScrollView
       style={styles.root}
@@ -23,6 +28,14 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
           {userId}
         </Paragraph>
       </View>
+      <ListGroup rounded>
+        <ListGroup.Item>
+          <ListGroup.Item.Content showSeparator={false}>
+            <Heading size="lg">Block</Heading>
+          </ListGroup.Item.Content>
+          <Toggle accessibilityLabel="Block contact" value={blocked} onValueChange={setBlocked} />
+        </ListGroup.Item>
+      </ListGroup>
     </ScrollView>
   );
 }
