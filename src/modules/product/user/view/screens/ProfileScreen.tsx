@@ -47,6 +47,7 @@ const styles = createStyles(({ color, padding, spacing }) => ({
   },
   content: {
     padding: padding.lg,
+    gap: spacing.lg,
   },
   identity: {
     alignItems: "center",
