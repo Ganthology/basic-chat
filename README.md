@@ -73,9 +73,11 @@ Settings
 
 ## How AI was used
 
-- Cursor agents wrote stacked PRs (tokens, network, query, screens, block store)
-- SPEC and agent docs drafted in Cursor
-- Human review / merge on GitHub
+I use Cursor agent and Cursor cloud agent to create PRs. I usually have 3–5 agents running in parallel on different tasks/features. I already know the end state I want. They create the PR, I review, then I let the agent merge it.
+
+For the initial UI, I get an agent to prototype different variants and themes so I can decide which to go with, then tweak until I'm satisfied with the layout and look. That part uses the Anthropic frontend-design skill.
+
+Verification is Storybook, Expo Go for quick UI and behaviour checks, and a dev build to test native-required features. I also get agents to run Evan Bacon's [`serve-sim`](https://github.com/evanbacon/serve-sim) so they verify their work before reporting back.
 
 ## Docs
 
