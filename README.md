@@ -4,9 +4,7 @@ Expo chat app against `https://responserift.dev/`.
 
 ## Demo
 
-<video src="https://github.com/Ganthology/basic-chat/releases/download/v1.1.0/demo.mp4" controls muted playsinline loop width="360" poster="docs/review/demo.png">
-  <img src="docs/review/demo.png" alt="Chat demo" width="360" />
-</video>
+<video src="https://github.com/Ganthology/basic-chat/releases/download/v1.1.0/demo.mp4" controls muted playsinline loop width="360"></video>
 
 ## Run
 
@@ -79,19 +77,19 @@ Import rules: [docs/agent/architecture.md](docs/agent/architecture.md).
 
 Inbox
 
-![Inbox](docs/review/inbox.png)
+<img src="docs/review/inbox.png" alt="Inbox" width="360" />
 
 Chat
 
-![Chat](docs/review/chat.png)
+<img src="docs/review/chat.png" alt="Chat" width="360" />
 
 Profile
 
-![Profile](docs/review/profile.png)
+<img src="docs/review/profile.png" alt="Profile" width="360" />
 
 Settings
 
-![Settings](docs/review/settings.png)
+<img src="docs/review/settings.png" alt="Settings" width="360" />
 
 ## How AI was used
 
