@@ -15,7 +15,7 @@ const meta = {
       control: { type: "select" },
       options: ["other", "user"],
     },
-    optimistic: { control: "boolean" },
+    appear: { control: "boolean" },
   },
   decorators: [
     (Story) => (
@@ -38,8 +38,8 @@ export const User: Story = {
   args: { from: "user", children: "Same — grabbing a table" },
 };
 
-export const Optimistic: Story = {
-  args: { from: "user", optimistic: true, children: "Yes. Corner booth." },
+export const Appear: Story = {
+  args: { from: "user", appear: true, children: "Yes. Corner booth." },
 };
 
 export const LongWrap: Story = {

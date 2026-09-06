@@ -12,6 +12,7 @@ import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
+import { chatMessageItemType } from "../chatMessageItemType";
 import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { ChatThreadEmpty } from "../components/ChatThreadEmpty";
@@ -65,8 +66,9 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         ref={listRef}
         data={rows}
         keyExtractor={(item) => item.id}
+        getItemType={(item) => chatMessageItemType(item.body)}
         renderItem={({ item }) => (
-          <ChatMessage from={item.from} optimistic={item.optimistic}>
+          <ChatMessage from={item.from} appear={item.appear}>
             {item.body}
           </ChatMessage>
         )}

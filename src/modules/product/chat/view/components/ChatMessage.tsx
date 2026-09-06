@@ -1,5 +1,13 @@
-import { type ReactNode } from "react";
+"use no memo";
+
+import { type ReactNode, useEffect } from "react";
 import { View, type ViewProps } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
@@ -8,26 +16,48 @@ export type ChatMessageFrom = "user" | "other";
 
 export type ChatMessageProps = ViewProps & {
   from: ChatMessageFrom;
-  optimistic?: boolean;
+  appear?: boolean;
   children: ReactNode;
 };
 
 export function ChatMessage({
   from,
-  optimistic = false,
+  appear = false,
   children,
   style,
   ...rest
 }: ChatMessageProps) {
+  const reduceMotion = useReducedMotion();
+  const scale = useSharedValue(appear && !reduceMotion ? 0 : 1);
+
+  useEffect(() => {
+    if (!appear || reduceMotion) {
+      scale.set(1);
+      return;
+    }
+
+    scale.set(0);
+    scale.set(withSpring(1));
+  }, [appear, reduceMotion, scale]);
+
+  const growStyle = useAnimatedStyle(() => {
+    "worklet";
+    return {
+      transform: [{ scale: scale.get() }],
+    };
+  });
+
   return (
-    <View {...rest} style={[styles.row, rowStyles(from), optimistic && styles.optimistic, style]}>
-      <View style={[styles.bubble, bubbleStyles(from)]}>
+    <View {...rest} style={[styles.row, rowStyles(from), style]}>
+      <Animated.View
+        style={[styles.bubble, bubbleStyles(from), styles.growOrigin, growStyle]}
+      >
         {typeof children === "string" || typeof children === "number" ? (
           <Paragraph style={textStyles(from)}>{children}</Paragraph>
         ) : (
           children
         )}
-      </View>
+      </Animated.View>
     </View>
   );
 }
@@ -102,7 +132,7 @@ const styles = createStyles(({ color, padding, radius }) => ({
   textUser: {
     color: color.accentText,
   },
-  optimistic: {
-    opacity: 0.72,
+  growOrigin: {
+    transformOrigin: "bottom right",
   },
 }));

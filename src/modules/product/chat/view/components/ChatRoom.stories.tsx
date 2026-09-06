@@ -8,7 +8,6 @@ type StoryMessage = {
   id: string;
   from: ChatMessageFrom;
   body: string;
-  optimistic?: boolean;
 };
 
 const THREAD: StoryMessage[] = [
@@ -49,7 +48,7 @@ export const Thread: Story = {
       data={THREAD}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <ChatMessage from={item.from} optimistic={item.optimistic}>
+        <ChatMessage from={item.from}>
           {item.body}
         </ChatMessage>
       )}
@@ -63,7 +62,7 @@ export const LongOutgoing: Story = {
       data={THREAD_WITH_LONG}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <ChatMessage from={item.from} optimistic={item.optimistic}>
+        <ChatMessage from={item.from}>
           {item.body}
         </ChatMessage>
       )}

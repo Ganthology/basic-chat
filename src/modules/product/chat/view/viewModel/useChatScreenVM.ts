@@ -20,7 +20,7 @@ export type ChatThreadMessage = {
   body: string;
   from: ChatMessageFrom;
   createdAt: string;
-  optimistic?: boolean;
+  appear?: boolean;
 };
 
 export function useChatScreenVM(conversationId: string) {
@@ -73,16 +73,16 @@ export function useChatScreenVM(conversationId: string) {
       return;
     }
 
-    const optimisticId = createLocalId();
-    const optimistic: ChatThreadMessage = {
-      id: optimisticId,
+    const localId = createLocalId();
+    const local: ChatThreadMessage = {
+      id: localId,
       body,
       from: "user",
       createdAt: new Date().toISOString(),
-      optimistic: true,
+      appear: true,
     };
 
-    setLocalMessages((current) => [...current, optimistic]);
+    setLocalMessages((current) => [...current, local]);
     setDraft("");
 
     sendMutation.mutate(body, {
@@ -91,7 +91,7 @@ export function useChatScreenVM(conversationId: string) {
         setSentIds((current) => new Set(current).add(confirmedId));
         setLocalMessages((current) =>
           current.map((message) =>
-            message.id === optimisticId
+            message.id === localId
               ? {
                   id: confirmedId,
                   body: post.body,
@@ -103,7 +103,7 @@ export function useChatScreenVM(conversationId: string) {
         );
       },
       onError: () => {
-        setLocalMessages((current) => current.filter((message) => message.id !== optimisticId));
+        setLocalMessages((current) => current.filter((message) => message.id !== localId));
         setDraft((current) => (current.length === 0 ? body : current));
       },
     });
