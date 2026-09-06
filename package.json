@@ -62,6 +62,7 @@
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
+    "android:release": "node ./scripts/build-android-release.js",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "storybook": "node ./scripts/start-storybook.js",

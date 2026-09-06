@@ -13,6 +13,12 @@ npx expo start
 `EXPO_PUBLIC_API_URL` is already set in [.env.example](.env.example). iOS Simulator or Expo Go. Not Expo web ([docs/agent/verify.md](docs/agent/verify.md)).
 
 ```bash
+npm run android:release
+```
+
+Writes `basic-chat.apk` at the repo root. Standalone — no Metro. Needs `android/` (`npx expo prebuild --platform android` if missing).
+
+```bash
 npm run storybook
 ```
 
