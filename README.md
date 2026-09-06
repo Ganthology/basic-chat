@@ -43,6 +43,8 @@ src/modules/product/
 
 ## Architecture notes
 
+Clean architecture keeps layers independently testable and swappable, so the app stays scalable. AI works on one layer at a time instead of mashing everything into one file. Review stays focused and regressions stay smaller — separation of concerns.
+
 - Thin `src/app` routes → product screens
 - Product modules: `chat`, `user`, `settings`. Each is `data → view` (domain unused)
 - Platform: composable design components and React components (`style` + `ui`), logger (sentry), query (tanstack query), network
