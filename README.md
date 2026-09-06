@@ -2,6 +2,10 @@
 
 Expo chat app against `https://responserift.dev/`.
 
+## Demo
+
+![Chat demo](docs/review/demo.mp4)
+
 ## Run
 
 ```bash
