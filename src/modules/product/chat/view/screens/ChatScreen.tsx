@@ -45,21 +45,17 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const [composerOverlayHeight, setComposerOverlayHeight] = useState(
     insets.bottom + PADDING.md + COMPOSER_PILL_ESTIMATE,
   );
+  const [draft, setDraft] = useState("");
   const {
     messages,
     contact,
-    draft,
-    setDraft,
-    enqueueOutgoing,
-    confirmOutgoing,
-    dropOutgoing,
     sendMessage,
-    canSend,
     isBlocked,
     unblock,
     isPending,
     isError,
   } = useChatScreenVM(conversationId);
+  const canSend = draft.trim().length > 0 && !isBlocked;
   const listEndSpacer = isBlocked
     ? 0
     : threadEndSpacer(composerOverlayHeight, keyboardHeight, insets.bottom);
@@ -81,20 +77,10 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
       return;
     }
 
-    const localId = enqueueOutgoing(body);
     setDraft("");
     KeyboardController.setFocusTo("current");
     inputRef.current?.focus();
-
-    void sendMessage(body).then(
-      (post) => {
-        confirmOutgoing(localId, post);
-      },
-      () => {
-        dropOutgoing(localId);
-        setDraft((current) => (current.length === 0 ? body : current));
-      },
-    );
+    void sendMessage(body);
   }
 
   function onComposerOverlayLayout(event: LayoutChangeEvent) {
@@ -125,7 +111,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         data={rows}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ChatMessage from={item.from} optimistic={item.optimistic}>
+          <ChatMessage from={item.from}>
             {item.body}
           </ChatMessage>
         )}

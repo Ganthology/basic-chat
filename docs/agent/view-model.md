@@ -4,7 +4,7 @@ VM holds screen state. It also exposes functions the view composes. Each functio
 
 ## State
 
-Derived lists, draft, query flags, `canSend`. No toast text. No “what to show if X” besides raw flags (`isError`, `isPending`).
+Query data, derived lists, flags (`isError`, `isPending`). No toast text. Composer text stays on the screen.
 
 ## Functions
 
@@ -12,13 +12,12 @@ One job. Same inputs, one kind of result.
 
 | Kind | Does | Does not |
 | --- | --- | --- |
-| State write | Append, confirm, drop, set draft | Call the network |
-| Command | Talk to repo / mutation | Change unrelated UI |
+| Command | One repo / mutation call. Mutation may append to the query cache. | Toast, keyboard, navigation |
 | Read | Return current state | Trigger a fetch as a side quest |
 
-Wrong: `send()` that trims draft, enqueues optimistic, clears input, mutates, remaps ids, restores draft, and would show a toast.
+Wrong: `send()` that owns draft, pending rows, id remaps, and a toast.
 
-Right: view composes.
+Right: view composes UI around one command.
 
 ```ts
 const body = draft.trim();
@@ -26,22 +25,11 @@ if (body.length === 0 || isBlocked) {
   return;
 }
 
-const localId = enqueueOutgoing(body);
 setDraft("");
 keepKeyboard();
-
-try {
-  const post = await sendMessage(body);
-  confirmOutgoing(localId, post);
-} catch {
-  dropOutgoing(localId);
-  setDraft((current) => (current.length === 0 ? body : current));
-  // toast / error UI here when we have it
-}
+void sendMessage(body);
 ```
 
 ## View
 
-Map flags to UI. Compose functions. Keep keyboard, show toast, swap empty/error copy.
-
-Do not hide those side effects inside the VM so a later screen cannot reuse the same writes.
+Map flags to UI. Hold composer draft. Keep keyboard, show toast, swap empty/error copy.
