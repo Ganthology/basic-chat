@@ -3,6 +3,7 @@ import { ListGroup } from "@/modules/platform/ui/ListGroup";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 const LAST_MESSAGE_PLACEHOLDER = "No messages yet";
+const TIMESTAMP_PLACEHOLDER = "9:41 AM";
 
 type ChatInboxRowProps = {
   name: string;
@@ -24,6 +25,11 @@ export function ChatInboxRow({ name, avatar, onPress, testID }: ChatInboxRowProp
           <Heading size="lg" numberOfLines={1}>
             {name}
           </Heading>
+          <ListGroup.Item.Trailing>
+            <Paragraph size="sm" tone="tertiary">
+              {TIMESTAMP_PLACEHOLDER}
+            </Paragraph>
+          </ListGroup.Item.Trailing>
         </ListGroup.Item.Headline>
         <Paragraph size="md" tone="secondary" numberOfLines={1}>
           {LAST_MESSAGE_PLACEHOLDER}
