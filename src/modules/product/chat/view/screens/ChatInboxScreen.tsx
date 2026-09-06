@@ -23,12 +23,14 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
 
   return (
     <FlatList
+      testID="inbox-list"
       style={styles.root}
       contentContainerStyle={rows.length === 0 && !isPending ? styles.emptyContent : undefined}
       data={rows}
       keyExtractor={(item) => String(item.id)}
       renderItem={({ item }) => (
         <ChatInboxRow
+          testID={`inbox-row-${item.id}`}
           name={item.name}
           avatar={item.avatar}
           onPress={() => onOpenChat(String(item.id))}

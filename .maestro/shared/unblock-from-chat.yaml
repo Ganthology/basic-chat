@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+---
+- tapOn:
+    id: chat-unblock
+- assertNotVisible:
+    id: chat-blocked
+- assertVisible:
+    id: composer-input
+- assertVisible:
+    id: composer-send

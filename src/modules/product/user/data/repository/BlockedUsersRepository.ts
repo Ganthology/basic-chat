@@ -3,4 +3,5 @@ export type BlockedUsersRepository = {
   block(id: string): void;
   unblock(id: string): void;
   listIds(): string[];
+  subscribe(onStoreChange: () => void): () => void;
 };

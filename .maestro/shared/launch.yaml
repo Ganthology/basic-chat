@@ -1,0 +1,18 @@
+appId: ${APP_ID}
+---
+- launchApp:
+    stopApp: false
+- openLink: ${APP_LINK}
+- runFlow:
+    when:
+      visible: Open
+    commands:
+      - tapOn: Open
+- extendedWaitUntil:
+    visible:
+      id: inbox-list
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: ${CHAT_ROW_ID}
+    timeout: 20000

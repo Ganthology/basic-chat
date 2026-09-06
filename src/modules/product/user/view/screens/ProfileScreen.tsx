@@ -23,6 +23,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
 
   return (
     <ScrollView
+      testID="profile-screen"
       style={styles.root}
       contentContainerStyle={styles.content}
       contentInsetAdjustmentBehavior="automatic"
@@ -52,6 +53,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
           <GroupedTable.Row>
             <GroupedTable.Row.Heading>Block</GroupedTable.Row.Heading>
             <GroupedTable.Row.Toggle
+              testID="profile-block"
               accessibilityLabel="Block contact"
               value={blocked}
               onValueChange={setBlocked}

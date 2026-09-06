@@ -1,0 +1,18 @@
+appId: ${APP_ID}
+name: Unblock contact from chat
+tags:
+  - chat
+  - block
+  - smoke
+---
+- runFlow: ../shared/launch.yaml
+- runFlow: ../shared/open-chat.yaml
+- runFlow: ../shared/block-from-profile.yaml
+- runFlow: ../shared/assert-chat-blocked.yaml
+- runFlow: ../shared/unblock-from-chat.yaml
+- tapOn:
+    id: composer-input
+- inputText: Unblocked from Maestro
+- tapOn:
+    id: composer-send
+- assertVisible: Unblocked from Maestro

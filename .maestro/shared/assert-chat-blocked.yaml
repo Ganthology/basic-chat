@@ -1,0 +1,9 @@
+appId: ${APP_ID}
+---
+- assertVisible:
+    id: chat-blocked
+- assertVisible: Blocked
+- assertNotVisible:
+    id: composer-input
+- assertNotVisible:
+    id: composer-send

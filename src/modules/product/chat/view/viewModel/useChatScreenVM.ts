@@ -6,6 +6,7 @@ import { useInfiniteQuery } from "@/modules/platform/query/useInfiniteQuery";
 import { useQuery } from "@/modules/platform/query/useQuery";
 import type { Post } from "@/modules/product/chat/data/entities/Post";
 import { ChatRepositoryImpl } from "@/modules/product/chat/data/repositoryImpl/ChatRepositoryImpl";
+import { BlockedUsersRepositoryImpl } from "@/modules/product/user/data/repositoryImpl/BlockedUsersRepositoryImpl";
 import { UserFeatureFlagRepositoryImpl } from "@/modules/product/user/data/repositoryImpl/UserFeatureFlagRepositoryImpl";
 import { userQueryOptions } from "@/modules/product/user/view/query/userQueryOptions";
 
@@ -13,6 +14,7 @@ import type { ChatMessageFrom } from "../components/ChatMessage";
 import { messagesQueryOptions } from "../query/messagesQueryOptions";
 
 const chatRepository = new ChatRepositoryImpl();
+const blockedUsersRepository = new BlockedUsersRepositoryImpl();
 const userFeatureFlagRepository = new UserFeatureFlagRepositoryImpl();
 
 export type ChatThreadMessage = {
@@ -30,12 +32,21 @@ export function useChatScreenVM(conversationId: string) {
   const [draft, setDraft] = useState("");
   const [localMessages, setLocalMessages] = useState<ChatThreadMessage[]>([]);
   const [sentIds, setSentIds] = useState<ReadonlySet<string>>(() => new Set());
-  const subscribe = useCallback(
+  const subscribeBlocked = useCallback(
+    (onStoreChange: () => void) => blockedUsersRepository.subscribe(onStoreChange),
+    [],
+  );
+  const blocked = useSyncExternalStore(
+    subscribeBlocked,
+    () => blockedUsersRepository.isBlocked(conversationId),
+    () => blockedUsersRepository.isBlocked(conversationId),
+  );
+  const subscribeFlags = useCallback(
     (onStoreChange: () => void) => userFeatureFlagRepository.subscribe(onStoreChange),
     [],
   );
   const showEmptyChat = useSyncExternalStore(
-    subscribe,
+    subscribeFlags,
     () => userFeatureFlagRepository.getShowEmptyChat(conversationId),
     () => userFeatureFlagRepository.getShowEmptyChat(conversationId),
   );
@@ -68,7 +79,7 @@ export function useChatScreenVM(conversationId: string) {
 
   function send() {
     const body = draft.trim();
-    if (body.length === 0) {
+    if (blocked || body.length === 0) {
       return;
     }
 
@@ -113,7 +124,11 @@ export function useChatScreenVM(conversationId: string) {
     draft,
     setDraft,
     send,
-    canSend: draft.trim().length > 0,
+    canSend: !blocked && draft.trim().length > 0,
+    blocked,
+    unblock: () => {
+      blockedUsersRepository.unblock(conversationId);
+    },
     isPending: messagesQuery.isPending,
     isContactPending: contactQuery.isPending,
     isError: messagesQuery.isError,

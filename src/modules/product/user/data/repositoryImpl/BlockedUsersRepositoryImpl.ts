@@ -19,4 +19,8 @@ export class BlockedUsersRepositoryImpl implements BlockedUsersRepository {
   listIds(): string[] {
     return Object.keys(this.store.getState().ids);
   }
+
+  subscribe(onStoreChange: () => void): () => void {
+    return this.store.subscribe(onStoreChange);
+  }
 }

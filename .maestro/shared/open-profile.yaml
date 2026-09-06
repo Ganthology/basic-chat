@@ -1,0 +1,12 @@
+appId: ${APP_ID}
+---
+- tapOn:
+    id: chat-header
+- extendedWaitUntil:
+    visible:
+      id: profile-screen
+    timeout: 15000
+- extendedWaitUntil:
+    visible:
+      id: profile-block
+    timeout: 15000

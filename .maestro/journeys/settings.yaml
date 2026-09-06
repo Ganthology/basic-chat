@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+name: Settings shows name and version
+tags:
+  - settings
+  - smoke
+---
+- runFlow: ../shared/launch.yaml
+- tapOn: Settings
+- extendedWaitUntil:
+    visible:
+      id: settings-screen
+    timeout: 10000
+- assertVisible:
+    id: settings-name
+    text: You
+- assertVisible:
+    id: settings-version
+    text: ${APP_VERSION}
+- assertVisible: Name
+- assertVisible: Version
