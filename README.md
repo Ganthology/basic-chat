@@ -12,11 +12,21 @@ npx expo start
 
 `EXPO_PUBLIC_API_URL` is already set in [.env.example](.env.example). iOS Simulator or Expo Go. Not Expo web ([docs/agent/verify.md](docs/agent/verify.md)).
 
+Standalone APKs (no Metro). Repo has `basic-chat.apk` (arm64-v8a, phones). Other ABIs live on [GitHub Releases](https://github.com/Ganthology/basic-chat/releases) so the fat build stays off git.
+
+| Asset | Use |
+| --- | --- |
+| `basic-chat-*-arm64-v8a.apk` | Phones, Apple Silicon emulator |
+| `basic-chat-*-armeabi-v7a.apk` | Older 32-bit phones |
+| `basic-chat-*-x86_64.apk` | Intel emulator |
+| `basic-chat-*-universal.apk` | All of the above |
+
 ```bash
 npm run android:release
+npm run android:release:all
 ```
 
-Writes `basic-chat.apk` at the repo root. Standalone — no Metro. Needs `android/` (`npx expo prebuild --platform android` if missing).
+`android:release` writes repo-root `basic-chat.apk` (arm64). `android:release:all` also writes versioned files under `dist/apk/`. Needs `android/` (`npx expo prebuild --platform android` if missing).
 
 ```bash
 npm run storybook
