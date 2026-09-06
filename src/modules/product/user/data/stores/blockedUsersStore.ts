@@ -1,6 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
+
+import { zustandStorage } from "@/modules/platform/storage/zustandStorage";
 
 type BlockedUsersState = {
   ids: Record<string, true>;
@@ -25,7 +26,7 @@ export const blockedUsersStore = createStore<BlockedUsersState>()(
     }),
     {
       name: "blocked-users",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandStorage),
     },
   ),
 );

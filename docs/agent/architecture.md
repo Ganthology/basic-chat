@@ -22,6 +22,7 @@ src/
     platform/                   # packages. No product imports.
       auth/
       storage/
+      featureFlag/
       network/
       query/
       logger/
@@ -71,7 +72,7 @@ Shared code goes to platform, or a later shared product module (ADR).
 
 Clean code. No `data` / `domain` / `view` split. Treat as imported packages.
 
-Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query client, provider, defaults), `logger` (Sentry `Logger` base class), `style` (tokens + `createStyles` + `useLoadFonts`), `ui` (one folder per component).
+Typical packages: `auth`, `storage` (mmkv + Zustand persist adapter), `featureFlag` (namespaced local flags), `network`, `query` (React Query client, provider, defaults), `logger` (Sentry `Logger` base class), `style` (tokens + `createStyles` + `useLoadFonts`), `ui` (one folder per component).
 
 `style` / `ui` name layout roles, not product. `COLOR` is `background`, `container`, `accent` — never `incoming` or other domain nouns. Product maps “their message” → `container`, “mine” → `accent`.
 
@@ -108,6 +109,6 @@ Nest under the product module. Use the same three layers only when the subfeatur
 
 Reusable pieces are composable. Parent owns structure via `children`, slots, or render props.
 
-- Platform `style` = tokens + `createStyles`. Platform `ui` composes `Heading` / `Paragraph` from those. Button later.
+- Platform `style` = tokens + `createStyles`. Platform `ui` composes `Heading` / `Paragraph` / `Button` from those.
 - Product composes screens from those plus local components.
 - No god component that bakes a page layout the parent cannot change.

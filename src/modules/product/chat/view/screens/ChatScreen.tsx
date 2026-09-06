@@ -14,6 +14,7 @@ import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
+import { ChatThreadEmpty } from "../components/ChatThreadEmpty";
 import { Composer } from "../components/Composer";
 import { useChatScreenVM } from "../viewModel/useChatScreenVM";
 
@@ -74,15 +75,17 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         contentInsetEndAdjustment={contentInsetEndAdjustment}
         keyboardOffset={insets.bottom}
         ListEmptyComponent={
-          <View style={styles.status}>
-            {isPending ? (
+          isPending ? (
+            <View style={styles.status}>
               <ActivityIndicator />
-            ) : (
-              <Paragraph tone="secondary">
-                {isError ? "Could not load messages" : "No messages"}
-              </Paragraph>
-            )}
-          </View>
+            </View>
+          ) : isError ? (
+            <View style={styles.status}>
+              <Paragraph tone="secondary">Could not load messages</Paragraph>
+            </View>
+          ) : (
+            <ChatThreadEmpty />
+          )
         }
       />
       <View style={[styles.composerDock, { paddingBottom: insets.bottom }]}>
