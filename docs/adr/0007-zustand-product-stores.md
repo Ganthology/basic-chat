@@ -14,7 +14,7 @@ Blocked users is client-only state. Many screens may subscribe later. React Quer
 Use Zustand persist in product `data/stores`. Vanilla `createStore` — no React in data.
 
 - Product modules own their slices. Platform does not host product stores.
-- Repository contract wraps the store for writes/reads. View may subscribe to the store directly.
+- Repository contract wraps the store for writes/reads. Consume path: [ADR 0008](0008-client-state-through-repository.md).
 - Persist with Async Storage. mmkv is a later storage package.
 
 ## Consequences

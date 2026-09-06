@@ -84,8 +84,8 @@ Typical packages: `auth`, `storage` (mmkv), `network`, `query` (React Query clie
 - `entities` — types and enums only. One export per file. No functions, no React. Domain and view import these. No `domain/entities`.
 - `services` — API, local, or any other source. Stay on the wire shape.
 - `adapters` — map this module's writes onto a foreign API (e.g. send message → create post).
-- `stores` — Zustand vanilla stores. Persist lives here. No React.
-- `repository` — contract only.
+- `stores` — Zustand vanilla stores. Persist lives here. No React. Private to `repositoryImpl`. View does not import stores.
+- `repository` — contract only. Client state reads, writes, and `subscribe` go through this port.
 - `repositoryImpl` — compose services, adapters, and stores. View and domain depend on the contract.
 
 ### domain
@@ -96,7 +96,7 @@ Pure useCases: same input → same output. No React, no query client, no navigat
 
 - `screens` — consumed by `src/app`.
 - `components` — product-local composition.
-- `viewModel` — screen-level orchestration. `hooks` — reusable view logic. Both allowed. Do not invent a state library here.
+- `viewModel` — screen state + single-purpose functions. View composes those functions and UI side effects (toast, keyboard, error copy). See [view-model.md](view-model.md). `hooks` — reusable view logic. Both allowed. Do not invent a state library here.
 - `query` — TanStack `queryOptions`. Platform `query` owns the client.
 - `translations` — module strings. i18n library is a later decision.
 
