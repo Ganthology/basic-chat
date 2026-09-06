@@ -1,0 +1,14 @@
+appId: ${APP_ID}
+name: Enter chat and send message
+tags:
+  - chat
+  - smoke
+---
+- runFlow: ../shared/launch.yaml
+- runFlow: ../shared/open-chat.yaml
+- tapOn:
+    id: composer-input
+- inputText: Hello from Maestro
+- tapOn:
+    id: composer-send
+- assertVisible: Hello from Maestro

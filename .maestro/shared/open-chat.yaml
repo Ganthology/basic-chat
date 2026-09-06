@@ -1,0 +1,12 @@
+appId: ${APP_ID}
+---
+- tapOn:
+    id: ${CHAT_ROW_ID}
+- extendedWaitUntil:
+    visible:
+      id: chat-screen
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: chat-header
+    timeout: 15000

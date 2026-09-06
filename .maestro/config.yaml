@@ -1,0 +1,10 @@
+# Local default is Expo Go. Native build: maestro test -e APP_ID=<bundle-id>
+flows:
+  - journeys/*
+
+env:
+  APP_ID: host.exp.Exponent
+  APP_LINK: basicchat://
+  CHAT_ROW_ID: inbox-row-1
+  PAGE_TWO_ROW_ID: inbox-row-21
+  APP_VERSION: "1.0.0"

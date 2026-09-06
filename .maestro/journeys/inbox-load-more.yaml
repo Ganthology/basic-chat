@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+name: Inbox scroll loads more users
+tags:
+  - inbox
+  - smoke
+---
+- runFlow: ../shared/launch.yaml
+- scrollUntilVisible:
+    element:
+      id: ${PAGE_TWO_ROW_ID}
+    direction: DOWN
+    timeout: 20000
+    centerElement: true
+- assertVisible:
+    id: ${PAGE_TWO_ROW_ID}

@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+---
+- runFlow: open-profile.yaml
+- tapOn:
+    id: profile-block
+- back
+- extendedWaitUntil:
+    visible:
+      id: chat-screen
+    timeout: 15000
