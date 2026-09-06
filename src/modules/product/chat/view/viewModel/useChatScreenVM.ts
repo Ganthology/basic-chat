@@ -1,17 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 
 import type { Page } from "@/modules/platform/network/Page";
 import { useInfiniteQuery } from "@/modules/platform/query/useInfiniteQuery";
 import { useQuery } from "@/modules/platform/query/useQuery";
 import type { Post } from "@/modules/product/chat/data/entities/Post";
 import { ChatRepositoryImpl } from "@/modules/product/chat/data/repositoryImpl/ChatRepositoryImpl";
+import { UserFeatureFlagRepositoryImpl } from "@/modules/product/user/data/repositoryImpl/UserFeatureFlagRepositoryImpl";
 import { userQueryOptions } from "@/modules/product/user/view/query/userQueryOptions";
 
 import type { ChatMessageFrom } from "../components/ChatMessage";
 import { messagesQueryOptions } from "../query/messagesQueryOptions";
 
 const chatRepository = new ChatRepositoryImpl();
+const userFeatureFlagRepository = new UserFeatureFlagRepositoryImpl();
 
 export type ChatThreadMessage = {
   id: string;
@@ -29,12 +31,34 @@ export function useChatScreenVM(conversationId: string) {
   const [draft, setDraft] = useState("");
   const [localMessages, setLocalMessages] = useState<ChatThreadMessage[]>([]);
   const [sentIds, setSentIds] = useState<ReadonlySet<string>>(() => new Set());
-
-  const messages = useMemo(
-    () =>
-      mergeThreadMessages(flattenMessagePages(messagesQuery.data?.pages), localMessages, sentIds),
-    [localMessages, messagesQuery.data?.pages, sentIds],
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => userFeatureFlagRepository.subscribe(onStoreChange),
+    [],
   );
+  const showEmptyChat = useSyncExternalStore(
+    subscribe,
+    () => userFeatureFlagRepository.getShowEmptyChat(conversationId),
+    () => userFeatureFlagRepository.getShowEmptyChat(conversationId),
+  );
+
+  const messages = useMemo(() => {
+    const merged = mergeThreadMessages(
+      flattenMessagePages(messagesQuery.data?.pages),
+      localMessages,
+      sentIds,
+    );
+    if (!messagesQuery.isPending && !messagesQuery.isError && showEmptyChat) {
+      return [];
+    }
+    return merged;
+  }, [
+    localMessages,
+    messagesQuery.data?.pages,
+    messagesQuery.isError,
+    messagesQuery.isPending,
+    sentIds,
+    showEmptyChat,
+  ]);
 
   const sendMutation = useMutation({
     mutationFn: (body: string) => chatRepository.sendMessage(conversationId, body),
