@@ -1,10 +1,12 @@
 import { Stack } from "expo-router/stack";
 
-import { transparentHeaderScreenOptions } from "@/modules/platform/style/transparentHeaderScreenOptions";
+import { useHeaderScreenOptions } from "@/modules/platform/style/useHeaderScreenOptions";
 
 export default function SettingsLayout() {
+  const screenOptions = useHeaderScreenOptions();
+
   return (
-    <Stack screenOptions={transparentHeaderScreenOptions}>
+    <Stack screenOptions={screenOptions}>
       <Stack.Screen
         name="index"
         options={{ title: "Settings", headerLargeTitle: true }}

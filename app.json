@@ -6,6 +6,10 @@
     "icon": "./assets/images/icon.png",
     "scheme": "basicchat",
     "userInterfaceStyle": "automatic",
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#eef2fb"
+    },
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.rgbk.basicchat"
