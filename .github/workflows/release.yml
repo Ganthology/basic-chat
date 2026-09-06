@@ -45,3 +45,34 @@ jobs:
           git push origin HEAD
           git push origin "v${version}"
           gh release create "v${version}" --generate-notes
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install JS deps
+        run: npm ci
+
+      - name: Prebuild Android
+        run: |
+          cp .env.example .env
+          npx expo prebuild --platform android --non-interactive
+
+      - name: Assemble release APKs
+        run: npm run android:release:all
+
+      - name: Upload APKs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "v${{ steps.bump.outputs.version }}" dist/apk/*.apk
