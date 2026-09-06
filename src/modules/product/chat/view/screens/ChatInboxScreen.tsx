@@ -21,11 +21,24 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
 
   const rows = isPending || (isError && conversations.length === 0) ? [] : conversations;
 
+  if (!isPending && rows.length === 0) {
+    return (
+      <View style={styles.root} testID="inbox-list">
+        {isError ? (
+          <View style={styles.status}>
+            <Paragraph tone="secondary">Could not load conversations</Paragraph>
+          </View>
+        ) : (
+          <ConversationListEmpty />
+        )}
+      </View>
+    );
+  }
+
   return (
     <FlatList
       testID="inbox-list"
       style={styles.root}
-      contentContainerStyle={rows.length === 0 && !isPending ? styles.emptyContent : undefined}
       data={rows}
       keyExtractor={(item) => String(item.id)}
       renderItem={({ item }) => (
@@ -44,19 +57,11 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
       onEndReachedThreshold={0.5}
       contentInsetAdjustmentBehavior="automatic"
       ListEmptyComponent={
-        isPending ? (
-          <Skeleton.View>
-            {Array.from({ length: INBOX_SKELETON_COUNT }, (_, index) => (
-              <ListItem.Skeleton key={index} />
-            ))}
-          </Skeleton.View>
-        ) : isError ? (
-          <View style={styles.status}>
-            <Paragraph tone="secondary">Could not load conversations</Paragraph>
-          </View>
-        ) : (
-          <ConversationListEmpty />
-        )
+        <Skeleton.View>
+          {Array.from({ length: INBOX_SKELETON_COUNT }, (_, index) => (
+            <ListItem.Skeleton key={index} />
+          ))}
+        </Skeleton.View>
       }
       ListFooterComponent={
         isFetchingNextPage ? (
@@ -73,9 +78,6 @@ const styles = createStyles(({ color, padding }) => ({
   root: {
     flex: 1,
     backgroundColor: color.background,
-  },
-  emptyContent: {
-    flexGrow: 1,
   },
   status: {
     flex: 1,
