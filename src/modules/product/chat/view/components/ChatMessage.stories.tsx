@@ -15,7 +15,6 @@ const meta = {
       control: { type: "select" },
       options: ["other", "user"],
     },
-    optimistic: { control: "boolean" },
   },
   decorators: [
     (Story) => (
@@ -38,8 +37,12 @@ export const User: Story = {
   args: { from: "user", children: "Same — grabbing a table" },
 };
 
-export const Optimistic: Story = {
-  args: { from: "user", optimistic: true, children: "Yes. Corner booth." },
+export const Grow: Story = {
+  render: () => (
+    <ChatMessage.Grow>
+      <ChatMessage from="user">Yes. Corner booth.</ChatMessage>
+    </ChatMessage.Grow>
+  ),
 };
 
 export const LongWrap: Story = {

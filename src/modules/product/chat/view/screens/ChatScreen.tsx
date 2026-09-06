@@ -13,11 +13,12 @@ import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 import { Skeleton } from "@/modules/platform/ui/Skeleton";
 
+import { chatMessageItemType } from "../chatMessageItemType";
 import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { ChatThreadEmpty } from "../components/ChatThreadEmpty";
 import { Composer } from "../components/Composer";
-import { useChatScreenVM } from "../viewModel/useChatScreenVM";
+import { isLocalMessageId, useChatScreenVM } from "../viewModel/useChatScreenVM";
 
 type ChatScreenProps = {
   conversationId: string;
@@ -82,11 +83,15 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         ref={listRef}
         data={rows}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ChatMessage from={item.from} optimistic={item.optimistic}>
-            {item.body}
-          </ChatMessage>
-        )}
+        getItemType={(item) => chatMessageItemType(item.body)}
+        renderItem={({ item }) => {
+          const message = <ChatMessage from={item.from}>{item.body}</ChatMessage>;
+          if (!isLocalMessageId(item.id)) {
+            return message;
+          }
+
+          return <ChatMessage.Grow>{message}</ChatMessage.Grow>;
+        }}
         alignItemsAtEnd={rows.length > 0}
         contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
         contentInsetEndAdjustment={contentInsetEndAdjustment}
