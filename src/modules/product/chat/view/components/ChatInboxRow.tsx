@@ -8,13 +8,14 @@ type ChatInboxRowProps = {
   name: string;
   avatar: string;
   onPress: () => void;
+  testID?: string;
 };
 
-export function ChatInboxRow({ name, avatar, onPress }: ChatInboxRowProps) {
+export function ChatInboxRow({ name, avatar, onPress, testID }: ChatInboxRowProps) {
   const initials = initialsFromName(name);
 
   return (
-    <ListGroup.Item onPress={onPress}>
+    <ListGroup.Item testID={testID} onPress={onPress}>
       <ListGroup.Item.Avatar initials={initials} accessibilityLabel={name}>
         {avatar.length > 0 ? <ListGroup.Item.Avatar.Image source={avatar} /> : null}
       </ListGroup.Item.Avatar>
