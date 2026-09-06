@@ -13,7 +13,8 @@ type ProfileScreenProps = {
 };
 
 export function ProfileScreen({ userId }: ProfileScreenProps) {
-  const { user, isPending, isError, blocked, setBlocked } = useProfileScreenVM(userId);
+  const { user, isPending, isError, blocked, setBlocked, showEmptyChat, setShowEmptyChat } =
+    useProfileScreenVM(userId);
   const name = user?.name ?? "Contact";
   const phone = user?.phone ?? "—";
   const avatar = user?.avatar ?? "";
@@ -34,9 +35,7 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
               {avatar.length > 0 ? <Avatar.Image source={avatar} /> : null}
             </Avatar>
             <Heading size="3xl">{name}</Heading>
-            {isError ? (
-              <Paragraph tone="secondary">Could not load contact</Paragraph>
-            ) : null}
+            {isError ? <Paragraph tone="secondary">Could not load contact</Paragraph> : null}
           </>
         )}
       </View>
@@ -54,6 +53,14 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
               accessibilityLabel="Block contact"
               value={blocked}
               onValueChange={setBlocked}
+            />
+          </GroupedTable.Row>
+          <GroupedTable.Row>
+            <GroupedTable.Row.Heading>Empty chat</GroupedTable.Row.Heading>
+            <GroupedTable.Row.Toggle
+              accessibilityLabel="Show empty chat"
+              value={showEmptyChat}
+              onValueChange={setShowEmptyChat}
             />
           </GroupedTable.Row>
         </GroupedTable>
