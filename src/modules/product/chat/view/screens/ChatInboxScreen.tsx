@@ -1,11 +1,15 @@
 import { ActivityIndicator, FlatList, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
+import { ListItem } from "@/modules/platform/ui/ListGroup/ListItem";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
+import { Skeleton } from "@/modules/platform/ui/Skeleton";
 
 import { ChatInboxRow } from "../components/ChatInboxRow";
 import { ConversationListEmpty } from "../components/ConversationListEmpty";
 import { useChatInboxScreenVM } from "../viewModel/useChatInboxScreenVM";
+
+const INBOX_SKELETON_COUNT = 8;
 
 type ChatInboxScreenProps = {
   onOpenChat: (conversationId: string) => void;
@@ -21,7 +25,7 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
     <FlatList
       testID="inbox-list"
       style={styles.root}
-      contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
+      contentContainerStyle={rows.length === 0 && !isPending ? styles.emptyContent : undefined}
       data={rows}
       keyExtractor={(item) => String(item.id)}
       renderItem={({ item }) => (
@@ -41,9 +45,11 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
       contentInsetAdjustmentBehavior="automatic"
       ListEmptyComponent={
         isPending ? (
-          <View style={styles.status}>
-            <ActivityIndicator />
-          </View>
+          <Skeleton.View>
+            {Array.from({ length: INBOX_SKELETON_COUNT }, (_, index) => (
+              <ListItem.Skeleton key={index} />
+            ))}
+          </Skeleton.View>
         ) : isError ? (
           <View style={styles.status}>
             <Paragraph tone="secondary">Could not load conversations</Paragraph>

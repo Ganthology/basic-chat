@@ -1,10 +1,11 @@
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "@/modules/platform/ui/Avatar";
 import { GroupedTable } from "@/modules/platform/ui/GroupedTable";
 import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
+import { Skeleton } from "@/modules/platform/ui/Skeleton";
 
 import { useProfileScreenVM } from "../viewModel/useProfileScreenVM";
 
@@ -27,19 +28,20 @@ export function ProfileScreen({ userId }: ProfileScreenProps) {
       contentContainerStyle={styles.content}
       contentInsetAdjustmentBehavior="automatic"
     >
-      <View style={styles.identity}>
-        {isPending ? (
-          <ActivityIndicator />
-        ) : (
-          <>
-            <Avatar size="xl" initials={initials} accessibilityLabel={name}>
-              {avatar.length > 0 ? <Avatar.Image source={avatar} /> : null}
-            </Avatar>
-            <Heading size="3xl">{name}</Heading>
-            {isError ? <Paragraph tone="secondary">Could not load contact</Paragraph> : null}
-          </>
-        )}
-      </View>
+      {isPending ? (
+        <Skeleton.View style={styles.identity}>
+          <Avatar.Skeleton size="xl" />
+          <Heading.Skeleton size="3xl" />
+        </Skeleton.View>
+      ) : (
+        <View style={styles.identity}>
+          <Avatar size="xl" initials={initials} accessibilityLabel={name}>
+            {avatar.length > 0 ? <Avatar.Image source={avatar} /> : null}
+          </Avatar>
+          <Heading size="3xl">{name}</Heading>
+          {isError ? <Paragraph tone="secondary">Could not load contact</Paragraph> : null}
+        </View>
+      )}
       {isPending ? null : (
         <GroupedTable>
           <GroupedTable.Row>

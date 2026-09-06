@@ -27,6 +27,9 @@ export function ChatRoom<ItemT>({
       alignItemsAtEnd
       maintainScrollAtEnd
       initialScrollAtEnd
+      recycleItems={false}
+      estimatedItemSize={48}
+      maintainVisibleContentPosition={{ data: true, size: true }}
       ItemSeparatorComponent={ItemSeparatorComponent}
       {...rest}
       style={[styles.list, style]}

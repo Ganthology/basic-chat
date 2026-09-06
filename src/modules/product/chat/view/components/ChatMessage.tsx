@@ -4,23 +4,18 @@ import { View, type ViewProps } from "react-native";
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
+import { ChatMessageGrow } from "./ChatMessageGrow";
+
 export type ChatMessageFrom = "user" | "other";
 
 export type ChatMessageProps = ViewProps & {
   from: ChatMessageFrom;
-  optimistic?: boolean;
   children: ReactNode;
 };
 
-export function ChatMessage({
-  from,
-  optimistic = false,
-  children,
-  style,
-  ...rest
-}: ChatMessageProps) {
+function ChatMessageRoot({ from, children, style, ...rest }: ChatMessageProps) {
   return (
-    <View {...rest} style={[styles.row, rowStyles(from), optimistic && styles.optimistic, style]}>
+    <View {...rest} style={[styles.row, rowStyles(from), style]}>
       <View style={[styles.bubble, bubbleStyles(from)]}>
         {typeof children === "string" || typeof children === "number" ? (
           <Paragraph style={textStyles(from)}>{children}</Paragraph>
@@ -102,7 +97,8 @@ const styles = createStyles(({ color, padding, radius }) => ({
   textUser: {
     color: color.accentText,
   },
-  optimistic: {
-    opacity: 0.72,
-  },
 }));
+
+export const ChatMessage = Object.assign(ChatMessageRoot, {
+  Grow: ChatMessageGrow,
+});

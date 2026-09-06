@@ -22,7 +22,6 @@ export type ChatThreadMessage = {
   body: string;
   from: ChatMessageFrom;
   createdAt: string;
-  optimistic?: boolean;
 };
 
 export function useChatScreenVM(conversationId: string) {
@@ -84,16 +83,15 @@ export function useChatScreenVM(conversationId: string) {
       return;
     }
 
-    const optimisticId = createLocalId();
-    const optimistic: ChatThreadMessage = {
-      id: optimisticId,
+    const localId = createLocalId();
+    const local: ChatThreadMessage = {
+      id: localId,
       body,
       from: "user",
       createdAt: new Date().toISOString(),
-      optimistic: true,
     };
 
-    setLocalMessages((current) => [...current, optimistic]);
+    setLocalMessages((current) => [...current, local]);
     setDraft("");
 
     sendMutation.mutate(body, {
@@ -102,7 +100,7 @@ export function useChatScreenVM(conversationId: string) {
         setSentIds((current) => new Set(current).add(confirmedId));
         setLocalMessages((current) =>
           current.map((message) =>
-            message.id === optimisticId
+            message.id === localId
               ? {
                   id: confirmedId,
                   body: post.body,
@@ -114,7 +112,7 @@ export function useChatScreenVM(conversationId: string) {
         );
       },
       onError: () => {
-        setLocalMessages((current) => current.filter((message) => message.id !== optimisticId));
+        setLocalMessages((current) => current.filter((message) => message.id !== localId));
         setDraft((current) => (current.length === 0 ? body : current));
       },
     });
@@ -132,6 +130,7 @@ export function useChatScreenVM(conversationId: string) {
       blockedUsersRepository.unblock(conversationId);
     },
     isPending: messagesQuery.isPending,
+    isContactPending: contactQuery.isPending,
     isError: messagesQuery.isError,
   };
 }
@@ -170,6 +169,12 @@ function senderFromSentIds(id: string, sentIds: ReadonlySet<string>): ChatMessag
   return sentIds.has(id) ? "user" : "other";
 }
 
+const LOCAL_ID_PREFIX = "local-";
+
+export function isLocalMessageId(id: string): boolean {
+  return id.startsWith(LOCAL_ID_PREFIX);
+}
+
 function createLocalId(): string {
-  return `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  return `${LOCAL_ID_PREFIX}${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
