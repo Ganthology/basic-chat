@@ -12,6 +12,7 @@ import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
+import { ChatBlockedBar } from "../components/ChatBlockedBar";
 import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { ChatThreadEmpty } from "../components/ChatThreadEmpty";
@@ -39,7 +40,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     listRef,
     composerRef,
   );
-  const { messages, contact, draft, setDraft, send, canSend, isPending, isError } =
+  const { messages, contact, draft, setDraft, send, canSend, blocked, unblock, isPending, isError } =
     useChatScreenVM(conversationId);
 
   const rows = isPending || (isError && messages.length === 0) ? [] : messages;
@@ -60,7 +61,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   }, [avatar, initials, name, navigation, onOpenProfile]);
 
   return (
-    <View style={styles.root}>
+    <View testID="chat-screen" style={styles.root}>
       <ChatRoom
         ref={listRef}
         data={rows}
@@ -89,22 +90,32 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         }
       />
       <View style={[styles.composerDock, { paddingBottom: insets.bottom }]}>
-        <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
-          <View ref={composerRef} onLayout={onComposerLayout}>
-            <Composer>
-              <Composer.Input
-                value={draft}
-                onChangeText={setDraft}
-                onSubmitEditing={send}
-                returnKeyType="send"
-                enablesReturnKeyAutomatically
-              />
-              <Composer.IconButton accessibilityLabel="Send" disabled={!canSend} onPress={send}>
-                <Composer.IconButton.Icon icon={Send} />
-              </Composer.IconButton>
-            </Composer>
-          </View>
-        </KeyboardStickyView>
+        {blocked ? (
+          <ChatBlockedBar onUnblock={unblock} />
+        ) : (
+          <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
+            <View ref={composerRef} onLayout={onComposerLayout}>
+              <Composer>
+                <Composer.Input
+                  testID="composer-input"
+                  value={draft}
+                  onChangeText={setDraft}
+                  onSubmitEditing={send}
+                  returnKeyType="send"
+                  enablesReturnKeyAutomatically
+                />
+                <Composer.IconButton
+                  testID="composer-send"
+                  accessibilityLabel="Send"
+                  disabled={!canSend}
+                  onPress={send}
+                >
+                  <Composer.IconButton.Icon icon={Send} />
+                </Composer.IconButton>
+              </Composer>
+            </View>
+          </KeyboardStickyView>
+        )}
       </View>
     </View>
   );
@@ -113,6 +124,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
 function ChatScreenTitle({ name, avatar, initials, onPress }: ChatScreenTitleProps) {
   return (
     <Pressable
+      testID="chat-header"
       accessibilityRole="button"
       accessibilityLabel="Open contact profile"
       hitSlop={8}
