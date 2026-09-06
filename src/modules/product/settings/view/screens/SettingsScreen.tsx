@@ -1,10 +1,15 @@
+import { type ReactNode } from "react";
 import { ScrollView } from "react-native";
 
 import { getAppVersion } from "@/modules/platform/config/getAppVersion";
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { GroupedTable } from "@/modules/platform/ui/GroupedTable";
 
-export function SettingsScreen() {
+type SettingsScreenProps = {
+  children?: ReactNode;
+};
+
+export function SettingsScreen({ children }: SettingsScreenProps) {
   return (
     <ScrollView
       style={styles.root}
@@ -25,16 +30,18 @@ export function SettingsScreen() {
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
       </GroupedTable>
+      {children}
     </ScrollView>
   );
 }
 
-const styles = createStyles(({ color, padding }) => ({
+const styles = createStyles(({ color, padding, spacing }) => ({
   root: {
     flex: 1,
     backgroundColor: color.background,
   },
   content: {
     padding: padding.lg,
+    gap: spacing.lg,
   },
 }));
