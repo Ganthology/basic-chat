@@ -26,13 +26,12 @@ export function ChatRoom<ItemT>({
   return (
     <KeyboardAwareLegendList
       accessibilityRole="list"
-      alignItemsAtEnd
       maintainScrollAtEnd
       initialScrollAtEnd
       recycleItems={false}
       estimatedItemSize={48}
       keyboardShouldPersistTaps="handled"
-      maintainVisibleContentPosition={{ data: true, size: true }}
+      maintainVisibleContentPosition={{ data: true }}
       ItemSeparatorComponent={ItemSeparatorComponent}
       {...rest}
       style={[styles.list, style]}
@@ -51,7 +50,7 @@ const styles = createStyles(({ padding, spacing }) => ({
   },
   content: {
     paddingHorizontal: padding.md,
-    paddingVertical: padding.sm,
+    paddingBottom: padding.sm,
   },
   separator: {
     height: spacing.sm,

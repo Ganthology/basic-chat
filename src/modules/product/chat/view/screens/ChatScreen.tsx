@@ -1,19 +1,13 @@
+import {
+  useKeyboardChatComposerInset,
+  useKeyboardScrollToEnd,
+} from "@legendapp/list/keyboard";
 import { type LegendListRef } from "@legendapp/list/react-native";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Pressable,
-  View,
-  type LayoutChangeEvent,
-  type TextInput,
-} from "react-native";
-import {
-  KeyboardController,
-  KeyboardStickyView,
-  useKeyboardState,
-} from "react-native-keyboard-controller";
+import { useLayoutEffect, useRef } from "react";
+import { ActivityIndicator, Platform, Pressable, View, type TextInput } from "react-native";
+import { KeyboardController, KeyboardStickyView } from "react-native-keyboard-controller";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -46,16 +40,21 @@ type ChatScreenTitleProps = {
 };
 
 const COMPOSER_PILL_ESTIMATE = 48;
+const IOS_HEADER_BAR = 44;
 
 export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const listRef = useRef<LegendListRef>(null);
+  const composerRef = useRef<View>(null);
   const inputRef = useRef<TextInput>(null);
-  const keyboardHeight = useKeyboardState((state) => (state.isVisible ? state.height : 0));
-  const [composerOverlayHeight, setComposerOverlayHeight] = useState(
-    insets.bottom + PADDING.md + COMPOSER_PILL_ESTIMATE,
+  const composerPad = insets.bottom + PADDING.md;
+  const { contentInsetEndAdjustment, onComposerLayout } = useKeyboardChatComposerInset(
+    listRef,
+    composerRef,
+    composerPad + COMPOSER_PILL_ESTIMATE,
   );
+  const { scrollMessageToEnd } = useKeyboardScrollToEnd({ listRef });
   const {
     messages,
     contact,
@@ -78,29 +77,19 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const name = isContactPending ? "" : (contact?.name ?? "Contact");
   const avatar = contact?.avatar ?? "";
   const initials = initialsFromName(name);
-  const listEndSpacer = blocked
-    ? 0
-    : threadEndSpacer(composerOverlayHeight, keyboardHeight, insets.bottom);
+  const threadTopInset = headerTopInset(insets.top);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (blocked) {
-      return;
+      listRef.current?.reportContentInset({ bottom: 0 });
     }
-
-    const list = listRef.current;
-    if (list?.getState().isWithinMaintainScrollAtEndThreshold) {
-      void list.scrollToEnd({ animated: true });
-    }
-  }, [blocked, listEndSpacer]);
+  }, [blocked]);
 
   function onSend() {
     send();
     KeyboardController.setFocusTo("current");
     inputRef.current?.focus();
-  }
-
-  function onComposerOverlayLayout(event: LayoutChangeEvent) {
-    setComposerOverlayHeight(event.nativeEvent.layout.height);
+    void scrollMessageToEnd({ animated: true, closeKeyboard: false });
   }
 
   useLayoutEffect(() => {
@@ -137,11 +126,12 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
 
           return <ChatMessage.Grow>{message}</ChatMessage.Grow>;
         }}
-        alignItemsAtEnd={rows.length > 0}
-        contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
-        extraData={listEndSpacer}
-        keyboardLiftBehavior="never"
-        ListFooterComponent={listEndSpacer > 0 ? <View style={{ height: listEndSpacer }} /> : undefined}
+        contentContainerStyle={[
+          { paddingTop: threadTopInset },
+          rows.length === 0 ? styles.emptyContent : undefined,
+        ]}
+        contentInsetEndAdjustment={contentInsetEndAdjustment}
+        keyboardLiftBehavior="whenAtEnd"
         ListEmptyComponent={
           isPending ? (
             <View style={styles.status}>
@@ -168,8 +158,9 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         >
           <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
             <View
-              onLayout={onComposerOverlayLayout}
-              style={[styles.composerMeasure, { paddingBottom: insets.bottom + PADDING.md }]}
+              ref={composerRef}
+              onLayout={onComposerLayout}
+              style={[styles.composerMeasure, { paddingBottom: composerPad }]}
             >
               <Composer>
                 <Composer.Input
@@ -227,8 +218,11 @@ function ChatScreenTitle({ loading, name, avatar, initials, onPress }: ChatScree
   );
 }
 
-function threadEndSpacer(overlayHeight: number, keyboardHeight: number, bottomInset: number): number {
-  return overlayHeight + Math.max(0, keyboardHeight - bottomInset);
+function headerTopInset(topSafeArea: number): number {
+  if (Platform.OS === "ios") {
+    return topSafeArea + IOS_HEADER_BAR + PADDING.sm;
+  }
+  return PADDING.sm;
 }
 
 function initialsFromName(name: string): string {
