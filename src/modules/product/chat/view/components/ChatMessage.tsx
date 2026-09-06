@@ -1,63 +1,28 @@
-"use no memo";
-
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode } from "react";
 import { View, type ViewProps } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useReducedMotion,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
+
+import { ChatMessageGrow } from "./ChatMessageGrow";
 
 export type ChatMessageFrom = "user" | "other";
 
 export type ChatMessageProps = ViewProps & {
   from: ChatMessageFrom;
-  appear?: boolean;
   children: ReactNode;
 };
 
-export function ChatMessage({
-  from,
-  appear = false,
-  children,
-  style,
-  ...rest
-}: ChatMessageProps) {
-  const reduceMotion = useReducedMotion();
-  const scale = useSharedValue(appear && !reduceMotion ? 0 : 1);
-
-  useEffect(() => {
-    if (!appear || reduceMotion) {
-      scale.set(1);
-      return;
-    }
-
-    scale.set(0);
-    scale.set(withSpring(1));
-  }, [appear, reduceMotion, scale]);
-
-  const growStyle = useAnimatedStyle(() => {
-    "worklet";
-    return {
-      transform: [{ scale: scale.get() }],
-    };
-  });
-
+function ChatMessageRoot({ from, children, style, ...rest }: ChatMessageProps) {
   return (
     <View {...rest} style={[styles.row, rowStyles(from), style]}>
-      <Animated.View
-        style={[styles.bubble, bubbleStyles(from), styles.growOrigin, growStyle]}
-      >
+      <View style={[styles.bubble, bubbleStyles(from)]}>
         {typeof children === "string" || typeof children === "number" ? (
           <Paragraph style={textStyles(from)}>{children}</Paragraph>
         ) : (
           children
         )}
-      </Animated.View>
+      </View>
     </View>
   );
 }
@@ -132,7 +97,8 @@ const styles = createStyles(({ color, padding, radius }) => ({
   textUser: {
     color: color.accentText,
   },
-  growOrigin: {
-    transformOrigin: "bottom right",
-  },
 }));
+
+export const ChatMessage = Object.assign(ChatMessageRoot, {
+  Grow: ChatMessageGrow,
+});

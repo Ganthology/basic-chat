@@ -20,7 +20,6 @@ export type ChatThreadMessage = {
   body: string;
   from: ChatMessageFrom;
   createdAt: string;
-  appear?: boolean;
 };
 
 export function useChatScreenVM(conversationId: string) {
@@ -79,7 +78,6 @@ export function useChatScreenVM(conversationId: string) {
       body,
       from: "user",
       createdAt: new Date().toISOString(),
-      appear: true,
     };
 
     setLocalMessages((current) => [...current, local]);
@@ -155,6 +153,12 @@ function senderFromSentIds(id: string, sentIds: ReadonlySet<string>): ChatMessag
   return sentIds.has(id) ? "user" : "other";
 }
 
+const LOCAL_ID_PREFIX = "local-";
+
+export function isLocalMessageId(id: string): boolean {
+  return id.startsWith(LOCAL_ID_PREFIX);
+}
+
 function createLocalId(): string {
-  return `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  return `${LOCAL_ID_PREFIX}${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }

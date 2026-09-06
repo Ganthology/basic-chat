@@ -17,7 +17,7 @@ import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { ChatThreadEmpty } from "../components/ChatThreadEmpty";
 import { Composer } from "../components/Composer";
-import { useChatScreenVM } from "../viewModel/useChatScreenVM";
+import { isLocalMessageId, useChatScreenVM } from "../viewModel/useChatScreenVM";
 
 type ChatScreenProps = {
   conversationId: string;
@@ -67,11 +67,14 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         data={rows}
         keyExtractor={(item) => item.id}
         getItemType={(item) => chatMessageItemType(item.body)}
-        renderItem={({ item }) => (
-          <ChatMessage from={item.from} appear={item.appear}>
-            {item.body}
-          </ChatMessage>
-        )}
+        renderItem={({ item }) => {
+          const message = <ChatMessage from={item.from}>{item.body}</ChatMessage>;
+          if (!isLocalMessageId(item.id)) {
+            return message;
+          }
+
+          return <ChatMessage.Grow>{message}</ChatMessage.Grow>;
+        }}
         alignItemsAtEnd={rows.length > 0}
         contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
         contentInsetEndAdjustment={contentInsetEndAdjustment}
