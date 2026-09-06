@@ -66,7 +66,6 @@ const styles = createStyles(({ padding, radius, spacing }) => ({
     flexDirection: "row",
     alignItems: "flex-end",
     alignSelf: "stretch",
-    overflow: "hidden",
     gap: spacing.sm,
     paddingLeft: padding.md,
     paddingRight: padding.xs,

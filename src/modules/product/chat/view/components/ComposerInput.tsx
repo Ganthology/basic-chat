@@ -1,10 +1,5 @@
-import { forwardRef, useState } from "react";
-import {
-  type NativeSyntheticEvent,
-  TextInput,
-  type TextInputContentSizeChangeEventData,
-  type TextInputProps,
-} from "react-native";
+import { forwardRef } from "react";
+import { TextInput, type TextInputProps } from "react-native";
 
 import { COLOR } from "@/modules/platform/style/COLOR";
 import { FONT_SIZE } from "@/modules/platform/style/FONT_SIZE";
@@ -24,20 +19,10 @@ export const ComposerInput = forwardRef<TextInput, ComposerInputProps>(function 
     placeholder = "Message",
     placeholderTextColor = COLOR.light.textTertiary,
     style,
-    onContentSizeChange,
     ...rest
   },
   ref,
 ) {
-  const [scrollEnabled, setScrollEnabled] = useState(false);
-
-  function handleContentSizeChange(
-    event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>,
-  ) {
-    setScrollEnabled(event.nativeEvent.contentSize.height > MAX_HEIGHT);
-    onContentSizeChange?.(event);
-  }
-
   return (
     <TextInput
       ref={ref}
@@ -46,10 +31,11 @@ export const ComposerInput = forwardRef<TextInput, ComposerInputProps>(function 
       placeholderTextColor={placeholderTextColor}
       {...rest}
       multiline
-      scrollEnabled={scrollEnabled}
+      scrollEnabled
+      nestedScrollEnabled
+      contextMenuHidden={false}
       submitBehavior="newline"
       textAlignVertical="top"
-      onContentSizeChange={handleContentSizeChange}
       style={[styles.input, style]}
     />
   );
@@ -58,6 +44,8 @@ export const ComposerInput = forwardRef<TextInput, ComposerInputProps>(function 
 const styles = createStyles(({ color, fontFamily, fontSize, padding }) => ({
   input: {
     flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
     minWidth: 0,
     minHeight: MIN_HEIGHT,
     maxHeight: MAX_HEIGHT,
