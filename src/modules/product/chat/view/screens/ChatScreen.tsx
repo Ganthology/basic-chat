@@ -30,7 +30,7 @@ import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
 import { ChatThreadEmpty } from "../components/ChatThreadEmpty";
 import { Composer } from "../components/Composer";
-import { isLocalMessageId, useChatScreenVM } from "../viewModel/useChatScreenVM";
+import { useChatScreenVM } from "../viewModel/useChatScreenVM";
 
 type ChatScreenProps = {
   conversationId: string;
@@ -65,6 +65,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     canSend,
     blocked,
     unblock,
+    growingIds,
     isPending,
     isContactPending,
     isError,
@@ -123,7 +124,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         getItemType={(item) => chatMessageItemType(item.body)}
         renderItem={({ item }) => {
           const message = <ChatMessage from={item.from}>{item.body}</ChatMessage>;
-          if (!isLocalMessageId(item.id)) {
+          if (!growingIds.has(item.id)) {
             return message;
           }
 
