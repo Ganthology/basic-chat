@@ -4,6 +4,7 @@ import { createStyles } from "@/modules/platform/style/createStyles";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
 
 import { ChatInboxRow } from "../components/ChatInboxRow";
+import { ConversationListEmpty } from "../components/ConversationListEmpty";
 import { useChatInboxScreenVM } from "../viewModel/useChatInboxScreenVM";
 
 type ChatInboxScreenProps = {
@@ -37,15 +38,17 @@ export function ChatInboxScreen({ onOpenChat }: ChatInboxScreenProps) {
       onEndReachedThreshold={0.5}
       contentInsetAdjustmentBehavior="automatic"
       ListEmptyComponent={
-        <View style={styles.status}>
-          {isPending ? (
+        isPending ? (
+          <View style={styles.status}>
             <ActivityIndicator />
-          ) : (
-            <Paragraph tone="secondary">
-              {isError ? "Could not load conversations" : "No conversations"}
-            </Paragraph>
-          )}
-        </View>
+          </View>
+        ) : isError ? (
+          <View style={styles.status}>
+            <Paragraph tone="secondary">Could not load conversations</Paragraph>
+          </View>
+        ) : (
+          <ConversationListEmpty />
+        )
       }
       ListFooterComponent={
         isFetchingNextPage ? (
