@@ -34,7 +34,6 @@ export function useChatScreenVM(conversationId: string) {
   const contactQuery = useQuery(userQueryOptions(conversationId));
 
   const [draft, setDraft] = useState("");
-  const [growingIds, setGrowingIds] = useState<ReadonlySet<string>>(() => new Set());
   const sentIds = sentIdsQuery.data ?? EMPTY_SENT_IDS;
   const subscribeBlocked = useCallback(
     (onStoreChange: () => void) => blockedUsersRepository.subscribe(onStoreChange),
@@ -81,18 +80,12 @@ export function useChatScreenVM(conversationId: string) {
     queryClient.setQueryData(sentOptions.queryKey, (current: ReadonlySet<string> | undefined) =>
       new Set(current).add(localKey),
     );
-    setGrowingIds((current) => new Set(current).add(localKey));
     setDraft("");
 
     sendMutation.mutate(body, {
       onError: () => {
         queryClient.setQueryData(messageOptions.queryKey, (current) => removePageItem(current, localId));
         queryClient.setQueryData(sentOptions.queryKey, (current: ReadonlySet<string> | undefined) => {
-          const next = new Set(current);
-          next.delete(localKey);
-          return next;
-        });
-        setGrowingIds((current) => {
           const next = new Set(current);
           next.delete(localKey);
           return next;
@@ -113,7 +106,6 @@ export function useChatScreenVM(conversationId: string) {
     unblock: () => {
       blockedUsersRepository.unblock(conversationId);
     },
-    growingIds,
     isPending: messagesQuery.isPending,
     isContactPending: contactQuery.isPending,
     isError: messagesQuery.isError,

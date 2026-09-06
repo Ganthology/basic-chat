@@ -65,13 +65,16 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     canSend,
     blocked,
     unblock,
-    growingIds,
     isPending,
     isContactPending,
     isError,
   } = useChatScreenVM(conversationId);
 
   const rows = isPending || (isError && messages.length === 0) ? [] : messages;
+  const loadedIdsRef = useRef<ReadonlySet<string> | null>(null);
+  if (loadedIdsRef.current == null && !isPending) {
+    loadedIdsRef.current = new Set(messages.map((message) => message.id));
+  }
   const name = isContactPending ? "" : (contact?.name ?? "Contact");
   const avatar = contact?.avatar ?? "";
   const initials = initialsFromName(name);
@@ -90,7 +93,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     }
   }, [blocked, listEndSpacer]);
 
-  function handleSend() {
+  function onSend() {
     send();
     KeyboardController.setFocusTo("current");
     inputRef.current?.focus();
@@ -124,7 +127,11 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         getItemType={(item) => chatMessageItemType(item.body)}
         renderItem={({ item }) => {
           const message = <ChatMessage from={item.from}>{item.body}</ChatMessage>;
-          if (!growingIds.has(item.id)) {
+          const isNewSend =
+            item.from === "user" &&
+            loadedIdsRef.current != null &&
+            !loadedIdsRef.current.has(item.id);
+          if (!isNewSend) {
             return message;
           }
 
@@ -176,7 +183,7 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
                     testID="composer-send"
                     accessibilityLabel="Send"
                     disabled={!canSend}
-                    onPress={handleSend}
+                    onPress={onSend}
                   >
                     <Composer.IconButton.Icon icon={Send} />
                   </Composer.IconButton>
