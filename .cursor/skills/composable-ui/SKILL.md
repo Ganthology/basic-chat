@@ -75,6 +75,27 @@ export const ListItem = Object.assign(ListItemRoot, {
 <IconButton icon={<Plus />} />   // slot as prop; use children
 ```
 
+## Skeleton
+
+Bones are static. Wrap the group in `Skeleton.View` so they share one pulse. `Parent.Skeleton` lives in the parent folder.
+
+```tsx
+if (loading) {
+  return (
+    <Skeleton.View>
+      <ListItem.Skeleton />
+    </Skeleton.View>
+  );
+}
+
+<Skeleton.View>
+  <Avatar.Skeleton size="sm" />
+  <Heading.Skeleton size="md" />
+</Skeleton.View>
+```
+
+Do not nest `Skeleton.View` inside a part.
+
 ## Stories
 
 Colocate `*.stories.tsx`. Show the full compose tree, not flattened props. Title = the root (`ui/ListGroup`, `ui/Avatar`).

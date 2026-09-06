@@ -4,6 +4,7 @@ import { Text, View, type ViewProps } from "react-native";
 import { createStyles } from "@/modules/platform/style/createStyles";
 
 import { AvatarImage } from "./AvatarImage";
+import { AvatarSkeleton } from "./AvatarSkeleton";
 
 export type AvatarSize = "sm" | "md" | "xl";
 
@@ -110,4 +111,5 @@ const styles = createStyles(({ fontFamily, fontSize, radius }) => ({
 
 export const Avatar = Object.assign(AvatarRoot, {
   Image: AvatarImage,
+  Skeleton: AvatarSkeleton,
 });

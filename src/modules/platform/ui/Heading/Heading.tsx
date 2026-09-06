@@ -4,6 +4,8 @@ import { createStyles } from "@/modules/platform/style/createStyles";
 import { type FontSize } from "@/modules/platform/style/FONT_SIZE";
 import { fontSizeStyles } from "@/modules/platform/style/fontSizeStyles";
 
+import { HeadingSkeleton } from "./HeadingSkeleton";
+
 type Tone = "default" | "secondary" | "tertiary";
 
 export type HeadingProps = TextProps & {
@@ -11,12 +13,7 @@ export type HeadingProps = TextProps & {
   tone?: Tone;
 };
 
-export function Heading({
-  size = "2xl",
-  tone = "default",
-  style,
-  ...rest
-}: HeadingProps) {
+function HeadingRoot({ size = "2xl", tone = "default", style, ...rest }: HeadingProps) {
   return (
     <Text
       accessibilityRole="header"
@@ -35,3 +32,7 @@ const styles = createStyles(({ color, fontFamily, fontSize }) => ({
   tertiary: { color: color.textTertiary },
   ...fontSizeStyles(fontSize),
 }));
+
+export const Heading = Object.assign(HeadingRoot, {
+  Skeleton: HeadingSkeleton,
+});
