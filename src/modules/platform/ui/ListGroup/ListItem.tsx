@@ -2,7 +2,7 @@ import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from "
 
 import { createStyles } from "@/modules/platform/style/createStyles";
 
-import { Avatar } from "./Avatar";
+import { Avatar } from "../Avatar";
 import { ListItemContent } from "./ListItemContent";
 import { ListItemHeadline } from "./ListItemHeadline";
 import { ListItemTrailing } from "./ListItemTrailing";
