@@ -12,5 +12,9 @@ export function messagesQueryOptions(conversationId: string, pageSize = PAGE_SIZ
     queryFn: ({ pageParam }) => chatRepository.listMessages(conversationId, pageParam),
     initialPageParam: { limit: pageSize, offset: 0 },
     getNextPageParam,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 }
