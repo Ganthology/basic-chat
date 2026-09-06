@@ -12,6 +12,7 @@ type SettingsScreenProps = {
 export function SettingsScreen({ children }: SettingsScreenProps) {
   return (
     <ScrollView
+      testID="settings-screen"
       style={styles.root}
       contentContainerStyle={styles.content}
       contentInsetAdjustmentBehavior="automatic"
@@ -20,13 +21,15 @@ export function SettingsScreen({ children }: SettingsScreenProps) {
         <GroupedTable.Row>
           <GroupedTable.Row.Heading>Name</GroupedTable.Row.Heading>
           <GroupedTable.Row.Value>
-            <GroupedTable.Row.Paragraph>You</GroupedTable.Row.Paragraph>
+            <GroupedTable.Row.Paragraph testID="settings-name">You</GroupedTable.Row.Paragraph>
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
         <GroupedTable.Row>
           <GroupedTable.Row.Heading>Version</GroupedTable.Row.Heading>
           <GroupedTable.Row.Value>
-            <GroupedTable.Row.Paragraph>{getAppVersion()}</GroupedTable.Row.Paragraph>
+            <GroupedTable.Row.Paragraph testID="settings-version">
+              {getAppVersion()}
+            </GroupedTable.Row.Paragraph>
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
       </GroupedTable>
