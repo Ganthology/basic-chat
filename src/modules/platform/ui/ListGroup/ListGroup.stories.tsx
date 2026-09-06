@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import { Heading } from "../Heading";
 import { Paragraph } from "../Paragraph";
+import { Skeleton } from "../Skeleton";
 import { ListGroup } from "./ListGroup";
 
 const meta = {
@@ -67,6 +68,18 @@ export const Selected: Story = {
           </Paragraph>
         </ListGroup.Item.Content>
       </ListGroup.Item>
+    </ListGroup>
+  ),
+};
+
+export const Loading: Story = {
+  render: () => (
+    <ListGroup>
+      <Skeleton.View>
+        <ListGroup.Item.Skeleton />
+        <ListGroup.Item.Skeleton />
+        <ListGroup.Item.Skeleton />
+      </Skeleton.View>
     </ListGroup>
   ),
 };
