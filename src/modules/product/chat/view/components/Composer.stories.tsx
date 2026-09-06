@@ -10,7 +10,7 @@ const meta = {
   component: Composer,
   decorators: [
     (Story) => (
-      <View style={{ width: "100%" }}>
+      <View style={{ width: "100%", padding: 16 }}>
         <Story />
       </View>
     ),
@@ -25,9 +25,11 @@ export const Empty: Story = {
   render: () => (
     <Composer>
       <Composer.Input />
-      <Composer.IconButton accessibilityLabel="Send" disabled>
-        <Composer.IconButton.Icon icon={Send} />
-      </Composer.IconButton>
+      <Composer.Trailing>
+        <Composer.IconButton accessibilityLabel="Send" disabled>
+          <Composer.IconButton.Icon icon={Send} />
+        </Composer.IconButton>
+      </Composer.Trailing>
     </Composer>
   ),
 };
@@ -39,9 +41,11 @@ export const Typed: Story = {
     return (
       <Composer>
         <Composer.Input value={value} onChangeText={setValue} />
-        <Composer.IconButton accessibilityLabel="Send" disabled={value.trim().length === 0}>
-          <Composer.IconButton.Icon icon={Send} />
-        </Composer.IconButton>
+        <Composer.Trailing>
+          <Composer.IconButton accessibilityLabel="Send" disabled={value.trim().length === 0}>
+            <Composer.IconButton.Icon icon={Send} />
+          </Composer.IconButton>
+        </Composer.Trailing>
       </Composer>
     );
   },
@@ -51,9 +55,47 @@ export const DisabledSend: Story = {
   render: () => (
     <Composer>
       <Composer.Input value="" editable={false} />
-      <Composer.IconButton accessibilityLabel="Send" disabled>
-        <Composer.IconButton.Icon icon={Send} />
-      </Composer.IconButton>
+      <Composer.Trailing>
+        <Composer.IconButton accessibilityLabel="Send" disabled>
+          <Composer.IconButton.Icon icon={Send} />
+        </Composer.IconButton>
+      </Composer.Trailing>
     </Composer>
   ),
+};
+
+export const Growing: Story = {
+  render: function GrowingComposer() {
+    const [value, setValue] = useState("Line one\nLine two\nLine three");
+
+    return (
+      <Composer>
+        <Composer.Input value={value} onChangeText={setValue} />
+        <Composer.Trailing>
+          <Composer.IconButton accessibilityLabel="Send" disabled={value.trim().length === 0}>
+            <Composer.IconButton.Icon icon={Send} />
+          </Composer.IconButton>
+        </Composer.Trailing>
+      </Composer>
+    );
+  },
+};
+
+export const Capped: Story = {
+  render: function CappedComposer() {
+    const [value, setValue] = useState(
+      "Line one\nLine two\nLine three\nLine four\nLine five\nLine six\nLine seven",
+    );
+
+    return (
+      <Composer>
+        <Composer.Input value={value} onChangeText={setValue} />
+        <Composer.Trailing>
+          <Composer.IconButton accessibilityLabel="Send" disabled={value.trim().length === 0}>
+            <Composer.IconButton.Icon icon={Send} />
+          </Composer.IconButton>
+        </Composer.Trailing>
+      </Composer>
+    );
+  },
 };

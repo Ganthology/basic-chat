@@ -1,12 +1,23 @@
-import { useKeyboardChatComposerInset } from "@legendapp/list/keyboard";
 import { type LegendListRef } from "@legendapp/list/react-native";
 import { useNavigation } from "expo-router";
 import { Send } from "lucide-react-native";
-import { useLayoutEffect, useRef } from "react";
-import { ActivityIndicator, Pressable, View } from "react-native";
-import { KeyboardStickyView } from "react-native-keyboard-controller";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  View,
+  type LayoutChangeEvent,
+  type TextInput,
+} from "react-native";
+import {
+  KeyboardController,
+  KeyboardStickyView,
+  useKeyboardState,
+} from "react-native-keyboard-controller";
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { PADDING } from "@/modules/platform/style/PADDING";
 import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
@@ -34,14 +45,16 @@ type ChatScreenTitleProps = {
   onPress: () => void;
 };
 
+const COMPOSER_PILL_ESTIMATE = 48;
+
 export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const listRef = useRef<LegendListRef>(null);
-  const composerRef = useRef<View>(null);
-  const { contentInsetEndAdjustment, onComposerLayout } = useKeyboardChatComposerInset(
-    listRef,
-    composerRef,
+  const inputRef = useRef<TextInput>(null);
+  const keyboardHeight = useKeyboardState((state) => (state.isVisible ? state.height : 0));
+  const [composerOverlayHeight, setComposerOverlayHeight] = useState(
+    insets.bottom + PADDING.md + COMPOSER_PILL_ESTIMATE,
   );
   const {
     messages,
@@ -61,13 +74,34 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   const name = isContactPending ? "" : (contact?.name ?? "Contact");
   const avatar = contact?.avatar ?? "";
   const initials = initialsFromName(name);
+  const listEndSpacer = blocked
+    ? 0
+    : threadEndSpacer(composerOverlayHeight, keyboardHeight, insets.bottom);
+
+  useEffect(() => {
+    if (blocked) {
+      return;
+    }
+
+    const list = listRef.current;
+    if (list?.getState().isWithinMaintainScrollAtEndThreshold) {
+      void list.scrollToEnd({ animated: true });
+    }
+  }, [blocked, listEndSpacer]);
+
+  function handleSend() {
+    send();
+    KeyboardController.setFocusTo("current");
+    inputRef.current?.focus();
+  }
+
+  function onComposerOverlayLayout(event: LayoutChangeEvent) {
+    setComposerOverlayHeight(event.nativeEvent.layout.height);
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: name,
-      headerTransparent: true,
-      headerShadowVisible: false,
-      headerStyle: { backgroundColor: "transparent" },
       headerTitle: () => (
         <ChatScreenTitle
           loading={isContactPending}
@@ -97,8 +131,9 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
         }}
         alignItemsAtEnd={rows.length > 0}
         contentContainerStyle={rows.length === 0 ? styles.emptyContent : undefined}
-        contentInsetEndAdjustment={contentInsetEndAdjustment}
-        keyboardOffset={insets.bottom}
+        extraData={listEndSpacer}
+        keyboardLiftBehavior="never"
+        ListFooterComponent={listEndSpacer > 0 ? <View style={{ height: listEndSpacer }} /> : undefined}
         ListEmptyComponent={
           isPending ? (
             <View style={styles.status}>
@@ -113,34 +148,43 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
           )
         }
       />
-      <View style={[styles.composerDock, { paddingBottom: insets.bottom }]}>
-        {blocked ? (
+      {blocked ? (
+        <View style={[styles.blockedDock, { paddingBottom: insets.bottom }]}>
           <ChatBlockedBar onUnblock={unblock} />
-        ) : (
+        </View>
+      ) : (
+        <Animated.View
+          entering={SlideInDown.springify()}
+          exiting={SlideOutDown.duration(220)}
+          style={styles.composerDock}
+        >
           <KeyboardStickyView offset={{ closed: 0, opened: insets.bottom }}>
-            <View ref={composerRef} onLayout={onComposerLayout}>
+            <View
+              onLayout={onComposerOverlayLayout}
+              style={[styles.composerMeasure, { paddingBottom: insets.bottom + PADDING.md }]}
+            >
               <Composer>
                 <Composer.Input
+                  ref={inputRef}
                   testID="composer-input"
                   value={draft}
                   onChangeText={setDraft}
-                  onSubmitEditing={send}
-                  returnKeyType="send"
-                  enablesReturnKeyAutomatically
                 />
-                <Composer.IconButton
-                  testID="composer-send"
-                  accessibilityLabel="Send"
-                  disabled={!canSend}
-                  onPress={send}
-                >
-                  <Composer.IconButton.Icon icon={Send} />
-                </Composer.IconButton>
+                <Composer.Trailing>
+                  <Composer.IconButton
+                    testID="composer-send"
+                    accessibilityLabel="Send"
+                    disabled={!canSend}
+                    onPress={handleSend}
+                  >
+                    <Composer.IconButton.Icon icon={Send} />
+                  </Composer.IconButton>
+                </Composer.Trailing>
               </Composer>
             </View>
           </KeyboardStickyView>
-        )}
-      </View>
+        </Animated.View>
+      )}
     </View>
   );
 }
@@ -175,6 +219,10 @@ function ChatScreenTitle({ loading, name, avatar, initials, onPress }: ChatScree
   );
 }
 
+function threadEndSpacer(overlayHeight: number, keyboardHeight: number, bottomInset: number): number {
+  return overlayHeight + Math.max(0, keyboardHeight - bottomInset);
+}
+
 function initialsFromName(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) {
@@ -195,6 +243,15 @@ const styles = createStyles(({ color, padding, spacing }) => ({
     backgroundColor: color.background,
   },
   composerDock: {
+    position: "absolute",
+    right: padding.md,
+    bottom: 0,
+    left: padding.md,
+  },
+  composerMeasure: {
+    width: "100%",
+  },
+  blockedDock: {
     backgroundColor: color.container,
   },
   title: {
