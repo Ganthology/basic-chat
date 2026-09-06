@@ -21,7 +21,7 @@ export function SettingsScreen({ children }: SettingsScreenProps) {
         <GroupedTable.Row>
           <GroupedTable.Row.Heading>Name</GroupedTable.Row.Heading>
           <GroupedTable.Row.Value>
-            <GroupedTable.Row.Paragraph testID="settings-name">You</GroupedTable.Row.Paragraph>
+            <GroupedTable.Row.Paragraph testID="settings-name">Ray</GroupedTable.Row.Paragraph>
           </GroupedTable.Row.Value>
         </GroupedTable.Row>
         <GroupedTable.Row>

@@ -12,7 +12,7 @@ tags:
     timeout: 10000
 - assertVisible:
     id: settings-name
-    text: You
+    text: Ray
 - assertVisible:
     id: settings-version
     text: ${APP_VERSION}

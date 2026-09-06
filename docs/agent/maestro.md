@@ -34,7 +34,7 @@ Local `APP_ID` defaults to Expo Go (`host.exp.Exponent`). After a native binary 
 | `chat-send-message` | Open first chat, type, send. |
 | `chat-block` | Header → profile → block → back → composer gone. Unblocks at the end. |
 | `chat-unblock` | Same block path, then unblock and send. |
-| `settings` | Tab → Name `You`, Version from `package.json`. Bump `APP_VERSION` in `.maestro/config.yaml` when the app version changes. |
+| `settings` | Tab → Name `Ray`, Version from `package.json`. Bump `APP_VERSION` in `.maestro/config.yaml` when the app version changes. |
 
 Shared steps are in `.maestro/shared/`. Journeys only are discovered (`flows: journeys/*`).
 
