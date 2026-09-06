@@ -4,7 +4,7 @@ Expo chat app against `https://responserift.dev/`.
 
 ## Demo
 
-<video src="https://github.com/Ganthology/basic-chat/releases/download/v1.1.0/demo.mp4" controls muted playsinline loop width="360"></video>
+<video src="https://github.com/user-attachments/assets/7296d94d-23b6-49d3-8835-c41c98dccabd" controls muted playsinline loop width="360"></video>
 
 ## Run
 
