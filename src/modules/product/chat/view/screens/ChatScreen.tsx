@@ -11,6 +11,7 @@ import { createStyles } from "@/modules/platform/style/createStyles";
 import { Avatar } from "@/modules/platform/ui/Avatar";
 import { Heading } from "@/modules/platform/ui/Heading";
 import { Paragraph } from "@/modules/platform/ui/Paragraph";
+import { Skeleton } from "@/modules/platform/ui/Skeleton";
 
 import { ChatMessage } from "../components/ChatMessage";
 import { ChatRoom } from "../components/ChatRoom";
@@ -24,6 +25,7 @@ type ChatScreenProps = {
 };
 
 type ChatScreenTitleProps = {
+  loading: boolean;
   name: string;
   avatar: string;
   initials: string;
@@ -39,11 +41,20 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
     listRef,
     composerRef,
   );
-  const { messages, contact, draft, setDraft, send, canSend, isPending, isError } =
-    useChatScreenVM(conversationId);
+  const {
+    messages,
+    contact,
+    draft,
+    setDraft,
+    send,
+    canSend,
+    isPending,
+    isContactPending,
+    isError,
+  } = useChatScreenVM(conversationId);
 
   const rows = isPending || (isError && messages.length === 0) ? [] : messages;
-  const name = contact?.name ?? "Contact";
+  const name = isContactPending ? "" : (contact?.name ?? "Contact");
   const avatar = contact?.avatar ?? "";
   const initials = initialsFromName(name);
 
@@ -54,10 +65,16 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
       headerShadowVisible: false,
       headerStyle: { backgroundColor: "transparent" },
       headerTitle: () => (
-        <ChatScreenTitle name={name} avatar={avatar} initials={initials} onPress={onOpenProfile} />
+        <ChatScreenTitle
+          loading={isContactPending}
+          name={name}
+          avatar={avatar}
+          initials={initials}
+          onPress={onOpenProfile}
+        />
       ),
     });
-  }, [avatar, initials, name, navigation, onOpenProfile]);
+  }, [avatar, initials, isContactPending, name, navigation, onOpenProfile]);
 
   return (
     <View style={styles.root}>
@@ -110,21 +127,31 @@ export function ChatScreen({ conversationId, onOpenProfile }: ChatScreenProps) {
   );
 }
 
-function ChatScreenTitle({ name, avatar, initials, onPress }: ChatScreenTitleProps) {
+function ChatScreenTitle({ loading, name, avatar, initials, onPress }: ChatScreenTitleProps) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="Open contact profile"
+      accessibilityLabel={loading ? "Loading contact" : "Open contact profile"}
+      accessibilityState={{ busy: loading }}
       hitSlop={8}
       onPress={onPress}
       style={styles.title}
     >
-      <Avatar size="sm" initials={initials} accessibilityLabel={name}>
-        {avatar.length > 0 ? <Avatar.Image source={avatar} /> : null}
-      </Avatar>
-      <Heading size="md" numberOfLines={1}>
-        {name}
-      </Heading>
+      {loading ? (
+        <Skeleton.View style={styles.title}>
+          <Avatar.Skeleton size="sm" />
+          <Heading.Skeleton size="md" width={96} />
+        </Skeleton.View>
+      ) : (
+        <>
+          <Avatar size="sm" initials={initials} accessibilityLabel={name}>
+            {avatar.length > 0 ? <Avatar.Image source={avatar} /> : null}
+          </Avatar>
+          <Heading size="md" numberOfLines={1}>
+            {name}
+          </Heading>
+        </>
+      )}
     </Pressable>
   );
 }

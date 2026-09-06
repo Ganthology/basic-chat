@@ -117,6 +117,7 @@ export function useChatScreenVM(conversationId: string) {
     send,
     canSend: draft.trim().length > 0,
     isPending: messagesQuery.isPending,
+    isContactPending: contactQuery.isPending,
     isError: messagesQuery.isError,
   };
 }
